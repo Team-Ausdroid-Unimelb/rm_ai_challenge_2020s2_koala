@@ -7,9 +7,9 @@ import sys
 
 # load yolo weights and cfg 
 def load_yolo():
-	net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
+	net = cv2.dnn.readNet("weights/yolov3-blue.weights", "config/yolov3-blue.cfg")
 	classes = []
-	with open("coco.names", "r") as f:
+	with open("names/mobilenet.names", "r") as f:
 		classes = [line.strip() for line in f.readlines()]
 	layers_names = net.getLayerNames()
 	output_layers = [layers_names[i[0]-1] for i in net.getUnconnectedOutLayers()]
@@ -20,7 +20,9 @@ def load_yolo():
 def load_image(img_path):
 	# image loading
 	img = cv2.imread(img_path)
-	img = cv2.resize(img, None, fx=0.4, fy=0.4)
+
+	# resizing makes it faster?
+	# img = cv2.resize(img, None, fx=0.4, fy=0.4)
 	height, width, channels = img.shape
 	return img, height, width, channels
 
@@ -88,6 +90,7 @@ def webcam_detect():
 		boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
 		draw_labels(boxes, confs, colors, class_ids, classes, frame)
 		key = cv2.waitKey(1)
+		print(key)
 		if key == 27:
 			break
 	cap.release()
@@ -107,4 +110,4 @@ def start_video(video_path):
 			break
 	cap.release()
 
-image_detect(os.path.abspath(sys.argv[1]))
+image_detect(os.path.abspath('images/' + sys.argv[1]))
