@@ -1,7 +1,7 @@
 # RoboMaster AI Challenge
-Requirements:
+This code uses previous weights to locate blue team's armour
 
-weight file: https://pjreddie.com/media/files/yolov3.weights
+Requirements:
 
 install opencv, numpy
 
