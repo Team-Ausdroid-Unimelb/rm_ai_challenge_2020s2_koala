@@ -1,0 +1,6 @@
+classes= 2
+train  = data/mask_train.txt
+valid  = data/mask_valid.txt
+test = data/mask_test.txt
+names = cfg/mask.names
+backup = backup
