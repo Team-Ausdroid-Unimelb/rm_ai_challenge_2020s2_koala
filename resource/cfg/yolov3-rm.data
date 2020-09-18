@@ -1,5 +1,0 @@
-classes= 1
-train  = data/rm_train.txt
-test  = data/rm_test.txt
-names  = cfg/rm.names
-backup = backup
