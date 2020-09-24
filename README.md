@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # RoboMaster AI Challenge (1.0.0)
 
 * [Introduction](#introduction)
@@ -27,3 +28,6 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
   1. [US1] locate the opponent robot’s armour in the pictures
   2. [US2] recognize the type of the armour pad the enemy is showing
 
+=======
+# RoboMaster AI Challenge
+>>>>>>> ce73466366791528d53c473eab92bd58b2cc7a12
