@@ -1,0 +1,6 @@
+classes= 3
+train  = data/rm_pose_train.txt
+valid  = data/rm_pose_valid.txt
+test  = data/rm_pose_test.txt
+names = cfg/rm_pose.names
+backup = backup

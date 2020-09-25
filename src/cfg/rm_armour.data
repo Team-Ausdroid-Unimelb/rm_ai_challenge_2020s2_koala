@@ -1,0 +1,6 @@
+classes= 2
+train  = data/rm_armour_train.txt
+valid  = data/rm_armour_valid.txt
+test  = data/rm_armour_test.txt
+names = cfg/rm_armour.names
+backup = backup
