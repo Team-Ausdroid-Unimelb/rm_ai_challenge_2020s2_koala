@@ -26,3 +26,9 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 ## User Stories
   1. [US1] locate the opponent robot’s armour in the pictures
   2. [US2] recognize the type of the armour pad the enemy is showing
+
+## User Guide
+1. Sign in to Google Colab
+2. upload notebook to Google Colab
+3. Run all the cells
+4. Scroll down to the bottom of the notebook to view results
