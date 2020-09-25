@@ -1,6 +1,5 @@
-classes= 1
+classes= 4
 train  = data/rm_train.txt
-valid  = data/rm_valid.txt
-test = data/rm_test.txt
+test  = data/rm_test.txt
 names = cfg/rm.names
 backup = backup
