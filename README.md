@@ -29,6 +29,7 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 
 ## User Guide
 1. Sign in to Google Colab using a Google account (https://colab.research.google.com/)
-2. Upload the notebook to Google Colab (notebook location: rm_ai_challenge_2020s2_koala/build/colab_notebook/RM_Koala_YOLO_approach.ipynb).
+2. Upload the notebook to Google Colab 
+  ``` notebook location: rm_ai_challenge_2020s2_koala/build/colab_notebook/RM_Koala_YOLO_approach.ipynb ```
 3. Run all the cells.
 4. Scroll down to the bottom of the notebook to view results.
