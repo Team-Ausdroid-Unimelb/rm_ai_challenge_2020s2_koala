@@ -1,3 +1,5 @@
+""" Based on: https://realpython.com/python-gui-tkinter/#:~:text=Python%20has%20a%20lot%20of,Windows%2C%20macOS%2C%20and%20Linux.&text=Although%20Tkinter%20is%20considered%20the,framework%2C%20it's%20not%20without%20criticism. """
+
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
