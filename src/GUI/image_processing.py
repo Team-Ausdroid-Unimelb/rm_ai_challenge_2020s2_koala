@@ -215,4 +215,4 @@ def image_detect(image_path, mode):
     draw_labels(image, bboxes, classes, colors)
     print('processing time on CPU: ', time.perf_counter() - tstart)
 
-image_detect(os.path.abspath(IMAGE_PATH), 2)
+# image_detect(os.path.abspath(IMAGE_PATH), 2)
