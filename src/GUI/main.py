@@ -3,6 +3,13 @@ from tkinter import filedialog
 from PIL import ImageTk,Image
 from filemanagement import *
 
+image_file_state = ImageFileState()
+
+# change image based on the slider value
+def slider_show_image(value):
+    image_file_state.set_current_img_num(int(value) - 1)
+    image_label.configure(image=image_file_state.get_current_img())
+
 # start putting on widgets
 root = Tk() 
 root.title('Upload Images') 
@@ -12,9 +19,9 @@ root.config(background = "white")
 # create widgets
 # upload_image_button = Button(root, text = "Upload Images", command = upload_images, compound="c") 
 
-button_prev = Button(root, text="<<", command=prev_image, compound="c")
-button_next = Button(root, text=">>", command=next_image, compound="c")
-slider = Scale(root, from_=0, to=0, orient=HORIZONTAL, command=slider_show_image)
+slider = Scale(root, from_=0, to=0, orient=HORIZONTAL, command = slider_show_image)
+button_prev = Button(root, text="<<", command=lambda: prev_image(slider, image_label, image_file_state), compound="c")
+button_next = Button(root, text=">>", command=lambda: next_image(slider, image_label, image_file_state), compound="c")
 
 image_label = Label()
 
@@ -30,8 +37,8 @@ menubar = Menu(root)
 # create a pulldown menu, and add it to the menu bar
 filemenu = Menu(menubar, tearoff=0)
 
-filemenu.add_command(label="Upload Images", command = upload_images)
-filemenu.add_command(label="Upload weight, name and config files as a zip", command=upload_config_files)
+filemenu.add_command(label="Upload Images", command = lambda: upload_images(slider, image_label, image_file_state))
+filemenu.add_command(label="Upload weight, name and config files as a zip", command=lambda: upload_config_files(image_file_state))
 filemenu.add_command(label="export", command=lambda: 0)
 
 menubar.add_cascade(label="Menu", menu=filemenu)

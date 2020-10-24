@@ -2,84 +2,88 @@ from tkinter import *
 from tkinter import filedialog
 from PIL import ImageTk,Image
 
-filenames = None
-images = []
-img_num = 0 # current image number
-image_size = (1300, 600)
-config_files = {}
+class ImageFileState:
+    def __init__(self):
+        self.img_num = 0 # current image number
+        self.filenames = None
+        self.images = []
+        self.image_size = (1300, 600)
+        self.config_files = {}
+    
+    def set_file_names(self, file_names):
+        self.filenames = file_names
+    
+    def clear_all_images(self):
+        self.images.clear()
+    
+    def set_current_img_num(self, num):
+        self.img_num = num
+    
+    def get_current_img(self):
+        return self.images[self.img_num]
 
 # Function for opening the file explorer window
-def upload_images():
-    # print("image label: ", image_label.winfo_height(), " ", image_label.winfo_width())
-    # print("window: ", root.winfo_height(), " ", root.winfo_width())
-    global filenames
-    global img_num
-    
+def upload_images(slider, image_label, image_file_state):
     filenames = filedialog.askopenfilenames(initialdir="./", title="Select Images", filetypes=[("images", ".jpg .png")])
 
     if not filenames: # no files are selected
         return 
 
+    image_file_state.set_file_names(filenames)
+
     # at least one file is selected
-    images.clear()  # clear all images
-    img_num = 0 # reset image number
+    image_file_state.clear_all_images()  # clear all images
+    image_file_state.set_current_img_num(0) # reset image number
+
     # reset slider
-    slider.configure(from_ = 1, to = len(filenames)) 
+    slider.configure(from_ = 1, to = len(image_file_state.filenames)) 
     slider.set(1)
 
     for i in filenames:
         im = Image.open(i)
-        im.thumbnail(image_size, Image.ANTIALIAS)
+        im.thumbnail(image_file_state.image_size, Image.ANTIALIAS)
         
-        images.append(ImageTk.PhotoImage(im))
+        image_file_state.images.append(ImageTk.PhotoImage(im))
     
     # display the first image
-    image_label.configure(image = images[0])
+    image_label.configure(image = image_file_state.images[0])
     return
 
 # next image button
-def next_image():
-    global images
-    global img_num
-
+def next_image(slider, image_label, image_file_state):
     # when there is no image or the last image is showing, clicking the button will do nothing
-    if not images or img_num >= len(images) - 1:
+    if not image_file_state.images or image_file_state.img_num >= len(image_file_state.images) - 1:
         return 
 
-    img_num += 1
-    slider.set(img_num + 1)
+    image_file_state.set_current_img_num(image_file_state.img_num + 1)
+    slider.set(image_file_state.img_num + 1)
 
-    image_label.configure(image=images[img_num])
-
-def prev_image():
-    global images
-    global img_num
-
-    # when there is no image or the first image is showing, clicking the button will do nothing
-    if not images or img_num <= 0:
-        return 
-
-    img_num -= 1
-    slider.set(img_num + 1)
-
-    image_label.configure(image=images[img_num])
+    image_label.configure(image=image_file_state.images[image_file_state.img_num])
 
     # print(img_num)
 
-def slider_show_image(v):
-    global img_num
+def prev_image(slider, image_label, image_file_state):
 
-    img_num = int(v) - 1
-    image_label.configure(image=images[img_num])
+    # when there is no image or the first image is showing, clicking the button will do nothing
+    if not image_file_state.images or image_file_state.img_num <= 0:
+        return 
 
-def upload_config_files():
+    image_file_state.set_current_img_num(image_file_state.img_num - 1)
+    slider.set(image_file_state.img_num + 1)
+
+    image_label.configure(image=image_file_state.images[image_file_state.img_num])
+
+    # print(img_num)
+
+def upload_config_files(image_file_state):
     from zipfile import ZipFile
     cfg_file_names = []
     extract_folder = "config"
     file_name = filedialog.askopenfilename(initialdir="./", title="Select a zip file that contains weight, name and zip file", 
                                             filetypes=[("zip", ".zip")])
-    print(file_name)
-
+    if not file_name:
+        print("no file chosen")
+        return 
     # open the zip file in READ mode 
     with ZipFile(file_name, 'r') as zip: 
         # printing all the contents of the zip file 
@@ -93,9 +97,9 @@ def upload_config_files():
     # add corresponding file paths
     for i in cfg_file_names:
         if i.endswith(".weights"):
-            config_files["weights"] = extract_folder + "/" + i
+            image_file_state.config_files["weights"] = extract_folder + "/" + i
         elif i.endswith(".cfg"):
-            config_files["cfg"] = extract_folder + "/" + i
+            image_file_state.config_files["cfg"] = extract_folder + "/" + i
         elif i.endswith(".names"):
-            config_files["names"] = extract_folder + "/" + i
-    print(config_files)
+            image_file_state.config_files["names"] = extract_folder + "/" + i
+    print(image_file_state.config_files)
