@@ -22,6 +22,7 @@ def imShow(img_path):
     plt.imshow(cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB))
     plt.show()
 
+
 ## Load necessary files for model
 def load_model(weights, cfg, names):
      
@@ -42,6 +43,7 @@ def load_model(weights, cfg, names):
     
     return model, output_layers, classes, colors
 
+
 def load_image(image_path):
     
     try:
@@ -54,6 +56,7 @@ def load_image(image_path):
         return
     
     return image
+
 
 ## Get NMS bounding boxes (standard result)
 def get_nms_bboxes(outputs, height, width, confidence_threshold, classes):
@@ -86,6 +89,7 @@ def get_nms_bboxes(outputs, height, width, confidence_threshold, classes):
 
     return nms_bboxes
 
+
 ## Get the largest armor bounding box in the picture
 def get_largest_bbox(nms_bboxes):
     
@@ -102,6 +106,7 @@ def get_largest_bbox(nms_bboxes):
             max_area, largest_bbox = bbox[2] * bbox[3], armor_bbox
 
     return append_pose([largest_bbox], pose_bboxes)
+
 
 ## Get the largest armor bounding boxes for 4 armor types in the picture
 def get_largest_bboxes(nms_bboxes):
@@ -130,6 +135,7 @@ def get_largest_bboxes(nms_bboxes):
         
     return append_pose(filtered_armor_bboxes, pose_bboxes)
 
+
 ## Append the proper pose label to each armor labels
 def append_pose(armor_bboxes, pose_bboxes):
     
@@ -153,6 +159,7 @@ def append_pose(armor_bboxes, pose_bboxes):
         armor_bboxes[i][3] = text_in + '_' + text_out
         
     return armor_bboxes
+
 
 # accepts image and outputs layers as parameters
 def positioning_bboxes(image, model, output_layers, mode = 3):
@@ -203,11 +210,7 @@ def draw_labels(image, bboxes, classes, colors):
     ## Show prediction result (for verification only)
     imShow('prediction.jpg')
 
-## Load necessary files for model (must do this before detection)
-model, output_layers, classes, colors = load_model(WEIGHTS, CFG, NAMES)
-
 def image_detect(image_path, mode): 
-    
     tstart = time.perf_counter()
     image = load_image(image_path)
     bboxes = positioning_bboxes(image, model, output_layers, mode)
@@ -215,4 +218,7 @@ def image_detect(image_path, mode):
     draw_labels(image, bboxes, classes, colors)
     print('processing time on CPU: ', time.perf_counter() - tstart)
 
-# image_detect(os.path.abspath(IMAGE_PATH), 2)
+def run():
+    ## Load necessary files for model (must do this before detection)
+    model, output_layers, classes, colors = load_model(WEIGHTS, CFG, NAMES)
+    image_detect(os.path.abspath(IMAGE_PATH), 2)

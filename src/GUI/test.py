@@ -47,9 +47,6 @@ def destroy_Toplevel1():
     w.destroy()
     w = None
 
-def run():
-    image_detect(os.path.abspath(IMAGE_PATH), 2)
-
 class Toplevel1:
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
@@ -80,8 +77,7 @@ class Toplevel1:
         self.Button1.configure(activebackground="#ececec")
         self.Button1.configure(activeforeground="#000000")
         self.Button1.configure(background="#d9d9d9")
-        # Detecting the images
-        self.Button1.configure(command=run)
+        self.Button1.configure(command=run) # Detecting the images
         self.Button1.configure(disabledforeground="#a3a3a3")
         self.Button1.configure(foreground="#000000")
         self.Button1.configure(highlightbackground="#d9d9d9")
