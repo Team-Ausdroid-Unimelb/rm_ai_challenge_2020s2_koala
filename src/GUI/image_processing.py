@@ -162,7 +162,7 @@ def append_pose(armor_bboxes, pose_bboxes):
 
 
 # accepts image and outputs layers as parameters
-def positioning_bboxes(image, model, output_layers, mode = 3):
+def positioning_bboxes(image, model, output_layers, classes, mode = 3):
     
     height, width, channels = image.shape
     
@@ -210,15 +210,16 @@ def draw_labels(image, bboxes, classes, colors):
     ## Show prediction result (for verification only)
     imShow('prediction.jpg')
 
-def image_detect(image_path, mode): 
+def image_detect(image_path, mode):
+    ## Load necessary files for model (must do this before detection)
+    model, output_layers, classes, colors = load_model(WEIGHTS, CFG, NAMES)
+
     tstart = time.perf_counter()
     image = load_image(image_path)
-    bboxes = positioning_bboxes(image, model, output_layers, mode)
+    bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
     print('processing time on CPU: ', time.perf_counter() - tstart)
     draw_labels(image, bboxes, classes, colors)
     print('processing time on CPU: ', time.perf_counter() - tstart)
 
 def run():
-    ## Load necessary files for model (must do this before detection)
-    model, output_layers, classes, colors = load_model(WEIGHTS, CFG, NAMES)
     image_detect(os.path.abspath(IMAGE_PATH), 2)
