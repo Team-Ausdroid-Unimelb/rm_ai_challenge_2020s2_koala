@@ -92,7 +92,7 @@ def upload_config_files(image_file_state):
         cfg_file_names = zip.namelist()
         # extracting all the files to the config folder
         zip.extractall(extract_folder) 
-    
+
     # remove all previous config files
     image_file_state.config_files.clear()
 
