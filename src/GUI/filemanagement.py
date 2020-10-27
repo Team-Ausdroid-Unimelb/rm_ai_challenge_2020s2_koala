@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from PIL import ImageTk,Image
 
 class ImageFileState:
@@ -79,11 +79,12 @@ def upload_config_files(image_file_state):
     from zipfile import ZipFile
     cfg_file_names = []
     extract_folder = "config"
+    files_needed = ["names", "cfg", "weights"]
     file_name = filedialog.askopenfilename(initialdir="./", title="Select a zip file that contains weight, name and zip file", 
                                             filetypes=[("zip", ".zip")])
     if not file_name:
         print("no file chosen")
-        return 
+        return
     # open the zip file in READ mode 
     with ZipFile(file_name, 'r') as zip: 
         # printing all the contents of the zip file 
@@ -92,7 +93,8 @@ def upload_config_files(image_file_state):
         # extracting all the files to the config folder
         zip.extractall(extract_folder) 
     
-    # print(cfg_file_names)
+    # remove all previous config files
+    image_file_state.config_files.clear()
 
     # add corresponding file paths
     for i in cfg_file_names:
@@ -102,4 +104,28 @@ def upload_config_files(image_file_state):
             image_file_state.config_files["cfg"] = extract_folder + "/" + i
         elif i.endswith(".names"):
             image_file_state.config_files["names"] = extract_folder + "/" + i
+
+    # check if all required files are present. If not, print an error message
+    for file in files_needed:
+        if file not in image_file_state.config_files:
+            messagebox.showinfo('Information', 'Please include names, cfg and weights files in the zip')
+            image_file_state.config_files.clear() # remove all existing files
+            return
+
     print(image_file_state.config_files)
+
+def export_file():
+    content = ["123", "456", "789"]
+
+    """Save the current file as a new file."""
+    filepath = filedialog.asksaveasfilename(
+        defaultextension="txt",
+        filetypes=[("Text Files", "*.txt")],
+    )
+    if not filepath:
+        return
+    with open(filepath, "w") as output_file:
+        for i in content:
+            output_file.write(i + "\n")
+
+

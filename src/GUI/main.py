@@ -39,7 +39,7 @@ filemenu = Menu(menubar, tearoff=0)
 
 filemenu.add_command(label="Upload Images", command = lambda: upload_images(slider, image_label, image_file_state))
 filemenu.add_command(label="Upload weight, name and config files as a zip", command=lambda: upload_config_files(image_file_state))
-filemenu.add_command(label="export", command=lambda: 0)
+filemenu.add_command(label="export", command=lambda: export_file())
 
 menubar.add_cascade(label="Menu", menu=filemenu)
 
