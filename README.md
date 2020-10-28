@@ -41,13 +41,66 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 ## [Released] 
 ## [v1.0]
 ### Added
-### Changed
+Commits on Sep 9
+Update README.md @af-kurniawan
+
+Commits on Sep 14, 2020
+Add resource @cchia790411
+Compress dataset @cchia790411
+
+Commits on Sep 15, 2020
+Add colab notebook @cchia790411
+Update README.md @cchia790411
+
+Commits on Sep 18, 2020
+add files via upload @cchia790411
+
+Commits on Sep 24, 2020
+added readme file @Jia Yin
+updated README @jiaywill
+update image paths @jiaywill
+
+Commits on Sep 25, 2020
+update notebook
+Add trained weight and update notebook
+update user guide
+
+Add: red1 200-249 labelled images. @isaacpedroza 
+
+### changed
+Commits on Sep 18, 2020
+Merge branch 'dev' of https://github.com/cchia790411/rm_ai_challenge_… @cchia790411
+notebook modified @cchia790411
+
+Commits on Sep 25, 2020
+Refonfigurate for 2 separate model (armour/pose) 
+Merge branch 'develop' of https://github.com/cchia790411/rm_ai_challe…
+
+Commits on Sep 26, 2020
+Delete: requirements.txt not needed anymore @isaacpedroza 
+Commits on Sep 27, 2020
+
+Merge branch 'feature/us1_us2' into develop @isaacpedroza
+Merge branch 'develop' into master @ isaacpedorza
+
 ## [v1.1]
-### Added
-### Changed
+### Added 
+Commits on Sep 28, 2020
+@isaacpedroza Update README.md
+@isaacpedroza Update README.md
+
+Commits on Sep 29, 2020
+@cchia790411 Reconfig network structure & update latest training result
+@cchia790411 Merge pull request #5 from cchia790411/develop … Reconfig network structure & update latest training result
+@cchia790411 Add Sprint 1 product notebook
+@cchia790411 Merge pull request #6 from cchia790411/develop … Add Sprint 1 product notebook
+@s-kim333 s-kim333 released release tag v1.1 29 Sep 
+
 ## [v1.2]
 ### Added
-### Changed
+@cchia790411 Add test cases
+@cchia790411
+Merge pull request #7 from cchia790411/develop
 
 ## Test Cases
 
