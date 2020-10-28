@@ -1,9 +1,13 @@
-# RoboMaster AI Challenge (1.0.0)
+# RoboMaster AI Challenge (2.0.0)
+
+## Table of contents
 
 * [Introduction](#introduction)
 * [Sample Input Image](#sample-input-image)
 * [System Components](#system-components)
 * [User Stories](#user-stories)
+* [Change Log](#change-logs)
+* [Test Cases](#test-cases)
 * [User Guide](#user-guide)
 
 ## Introduction
@@ -32,10 +36,15 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 ## User Stories
   1. [US1] locate the opponent robot’s armour in the pictures
   2. [US2] recognize the type of the armour pad the enemy is showing
+  
+## Change Logs
 
-## User Guide
+## Test Cases
+
+## User Guide (Release 1.0.0)
 1. Sign in to Google Colab using a Google account (https://colab.research.google.com/)
 2. Upload the notebook to Google Colab 
   ``` notebook location: rm_ai_challenge_2020s2_koala/build/colab_notebook/RM_Koala_YOLO_approach.ipynb ```
 3. Run all the cells.
 4. Scroll down to the bottom of the notebook to view results.
+## User Guide (Release 2.0.0)
