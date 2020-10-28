@@ -109,7 +109,7 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 - test case document for sprint 2 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%202/COMP900822020SM2RMKoala-TestingDocument-Sprint2-291020-0234-2394.pdf)
 
 ## Traceability matrix
-![Traceability Matrix] (/docs/Sprint 2/traceability matrix.png)
+![Traceability Matrix] (/docs/Sprint 2/traceability matrix.PNG)
 ## User Guide (Release v1.2)
 1. Sign in to Google Colab using a Google account (https://colab.research.google.com/)
 2. Upload the notebook to Google Colab 
