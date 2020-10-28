@@ -23,7 +23,7 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 ![Labelled image](src/images/sample_labelled_image.png)
 
 ### labelled image (updated for sprint2)
-![Unlabelled image](/prediction.png)
+![labelled image](/prediction.jpg)
 
 ## System Components
 
