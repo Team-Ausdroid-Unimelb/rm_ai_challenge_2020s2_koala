@@ -7,12 +7,11 @@ from pathlib import Path
 
 from PIL import ImageTk,Image
 import GUI_support
+import tkinter as tk
 
 WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
 CFG = 'config/yolov4-tiny_7class_mod.cfg'
 NAMES = 'config/rm_combine.names'
-# IMAGE_PATH = 'src/images/200-249/red1 200-249 armour/obj_train_data/red_1_frame0249.jpg'
-IMAGE_PATH = 'img/red_1_frame0238.jpg'
 CONFIDENCE_THRESHOLD = 0.3
 
 def imShow(img_path):
@@ -95,21 +94,28 @@ def get_nms_bboxes(outputs, height, width, confidence_threshold, classes):
 
 
 ## Get the largest armor bounding box in the picture
-def get_largest_bbox(nms_bboxes):
+def get_largest_bbox(nms_bboxes, filename):
     
     pose_bboxes = [bbox for bbox in nms_bboxes if bbox[2] > 3]
     armor_bboxes = [bbox for bbox in nms_bboxes if bbox[2] <= 3]
     
     max_area = 0
     
-    for armor_bbox in armor_bboxes:
+    if len(armor_bboxes) == 0:
+        print("No armour detected in", filename.name)
+        return pose_bboxes
+    else:
+        for armor_bbox in armor_bboxes:
+            
+            bbox, confidence, class_id, text = armor_bbox
+            
+            if bbox[2] * bbox[3] > max_area:
+                max_area, largest_bbox = bbox[2] * bbox[3], armor_bbox
         
-        bbox, confidence, class_id, text = armor_bbox
-        
-        if bbox[2] * bbox[3] > max_area:
-            max_area, largest_bbox = bbox[2] * bbox[3], armor_bbox
+        if max_area == 0:
+            largest_bbox = armor_bboxes[0]
 
-    return append_pose([largest_bbox], pose_bboxes)
+        return append_pose([largest_bbox], pose_bboxes)
 
 
 ## Get the largest armor bounding boxes for 4 armor types in the picture
@@ -166,7 +172,7 @@ def append_pose(armor_bboxes, pose_bboxes):
 
 
 # accepts image and outputs layers as parameters
-def positioning_bboxes(image, model, output_layers, classes, mode = 3):
+def positioning_bboxes(image, model, output_layers, classes, filename, mode = 3):
     
     height, width, channels = image.shape
     
@@ -181,15 +187,15 @@ def positioning_bboxes(image, model, output_layers, classes, mode = 3):
     nms_bboxes = get_nms_bboxes(outputs, height, width, CONFIDENCE_THRESHOLD, classes)
     
 
-    ## Scenario 1 - Find the largest armor pad and identify the pose
+    ## Mode 2 - Find the largest armor pad and identify the pose
     if mode == 2:
-        return get_largest_bbox(nms_bboxes)
+        return get_largest_bbox(nms_bboxes, filename)
     
-    ## Scenario 2 - Scenario 1 + Consider the possibility of multiple robots in the image
+    ## Mode 3 - Consider the possibility of multiple robots in the image
     elif mode == 3:
         return get_largest_bboxes(nms_bboxes)
     
-    ## Scenario 3 - Display armor and pose separately
+    ## Mode 1 - Display armor and pose separately
     else:
         return nms_bboxes
 
@@ -231,12 +237,13 @@ def image_detect(image_file_state):
     predictions_directory = images_directory / "predictions"
     Path.mkdir(predictions_directory, exist_ok=True)
     
+    # Select and draw bounding boxes on every image.
     for filename in filenames:
         # print(filename)
         image_path = os.path.abspath(filename)
         tstart = time.perf_counter()
         image = load_image(image_path)
-        bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
+        bboxes = positioning_bboxes(image, model, output_layers, classes, filename, mode)
         # print('processing time on CPU: ', time.perf_counter() - tstart)
         draw_labels(predictions_directory, filename, image, bboxes, classes, colors)
         # print('processing time on CPU: ', time.perf_counter() - tstart)
@@ -254,6 +261,10 @@ def image_detect(image_file_state):
     top = GUI_support.w
     # display the first image
     top.image_label.configure(image = image_file_state.images[0])
+
+    # Display output
+    top.Output.insert(tk.END, "First Image Output. Testing.")
+
     print("Predictions displayed.")
 
     return
