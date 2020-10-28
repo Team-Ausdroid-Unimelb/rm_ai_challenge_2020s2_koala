@@ -104,7 +104,7 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 
 ## Test Cases
 ### Sprint 1
-![test cases for spritn 1](/docs/Sprint 1/RM-Koala Testing Document.pdf)
+- test case document for sprint 1 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%201/RM-Koala%20Testing%20Document.pdf)
 
 ## User Guide (Release v1.2)
 1. Sign in to Google Colab using a Google account (https://colab.research.google.com/)
