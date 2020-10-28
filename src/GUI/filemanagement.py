@@ -1,11 +1,13 @@
 from tkinter import *
 from tkinter import filedialog, messagebox
 from PIL import ImageTk,Image
+from pathlib import Path
 
 class ImageFileState:
     def __init__(self):
         self.img_num = 0 # current image number
         self.filenames = None
+        self.images_folder = None
         self.images = []
         self.image_size = (1300, 600)
         self.config_files = {}
@@ -13,6 +15,9 @@ class ImageFileState:
     def set_file_names(self, file_names):
         self.filenames = file_names
     
+    def set_images_folder(self, images_folder):
+        self.images_folder = images_folder
+
     def clear_all_images(self):
         self.images.clear()
     
@@ -24,12 +29,19 @@ class ImageFileState:
 
 # Function for opening the file explorer window
 def upload_images(slider, image_label, image_file_state):
+    # Get the filenames
     filenames = filedialog.askopenfilenames(initialdir="./", title="Select Images", filetypes=[("images", ".jpg .png")])
-
+    
     if not filenames: # no files are selected
-        return 
-
-    image_file_state.set_file_names(filenames)
+        return
+    
+    # Save the folder selected
+    image_file_state.set_images_folder(Path(filenames[0]).parent)
+    # Save file names
+    standard_filenames = []
+    for filename in filenames:
+        standard_filenames.append(Path(filename))
+    image_file_state.set_file_names(standard_filenames)
 
     # at least one file is selected
     image_file_state.clear_all_images()  # clear all images

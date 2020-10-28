@@ -3,6 +3,10 @@ import cv2
 import numpy as np
 import time
 import os
+from pathlib import Path
+
+from PIL import ImageTk,Image
+import GUI_support
 
 WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
 CFG = 'config/yolov4-tiny_7class_mod.cfg'
@@ -190,7 +194,7 @@ def positioning_bboxes(image, model, output_layers, classes, mode = 3):
         return nms_bboxes
 
 ## Draw the predicted bounding boxes and labels on the image
-def draw_labels(image, bboxes, classes, colors): 
+def draw_labels(predictions_directory, filename, image, bboxes, classes, colors): 
     
     font = cv2.FONT_HERSHEY_PLAIN
 
@@ -203,23 +207,53 @@ def draw_labels(image, bboxes, classes, colors):
         color = colors[class_id]
         cv2.rectangle(image, (x,y), (x+w, y+h), color, 2)
         cv2.putText(image, label, (x, y - 5), font, 1, color, 1)
-        
-    ## Output prediction result to file
-    cv2.imwrite('prediction.jpg', image)
     
-    ## Show prediction result (for verification only)
-    imShow('prediction.jpg')
+    ## Output prediction result to file
+    path = predictions_directory / filename.name
+    cv2.imwrite(os.path.abspath(path), image)
+    
+    ## Show prediction result
+    # imShow('prediction.jpg')
 
-def image_detect(image_path, mode):
+
+def image_detect(image_file_state):
     ## Load necessary files for model (must do this before detection)
     model, output_layers, classes, colors = load_model(WEIGHTS, CFG, NAMES)
+    mode = 2
 
-    tstart = time.perf_counter()
-    image = load_image(image_path)
-    bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
-    print('processing time on CPU: ', time.perf_counter() - tstart)
-    draw_labels(image, bboxes, classes, colors)
-    print('processing time on CPU: ', time.perf_counter() - tstart)
+    filenames = image_file_state.filenames
+    if not filenames: # no files are selected
+        return
+    
+    # Get the folder from where the images were uploaded.
+    images_directory = image_file_state.images_folder
+    # Create predictions directory
+    predictions_directory = images_directory / "predictions"
+    Path.mkdir(predictions_directory, exist_ok=True)
+    
+    for filename in filenames:
+        # print(filename)
+        image_path = os.path.abspath(filename)
+        tstart = time.perf_counter()
+        image = load_image(image_path)
+        bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
+        # print('processing time on CPU: ', time.perf_counter() - tstart)
+        draw_labels(predictions_directory, filename, image, bboxes, classes, colors)
+        # print('processing time on CPU: ', time.perf_counter() - tstart)
 
-def run():
-    image_detect(os.path.abspath(IMAGE_PATH), 2)
+    print("Labelling done.")
+    print("Displaying predictions.")
+    image_file_state.clear_all_images()  # clear all images
+    image_file_state.set_current_img_num(0) # reset image number
+
+    for filename in filenames:
+        im = Image.open(predictions_directory / filename.name)
+        im.thumbnail(image_file_state.image_size, Image.ANTIALIAS)
+        image_file_state.images.append(ImageTk.PhotoImage(im))
+    
+    top = GUI_support.w
+    # display the first image
+    top.image_label.configure(image = image_file_state.images[0])
+    print("Predictions displayed.")
+
+    return
