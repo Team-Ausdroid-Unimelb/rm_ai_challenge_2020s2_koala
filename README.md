@@ -103,6 +103,8 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 - Merge pull request #7 from cchia790411/develop
 
 ## Test Cases
+### Sprint 1
+![test cases for spritn 1](/docs/Sprint 1/RM-Koala Testing Document.pdf)
 
 ## User Guide (Release v1.2)
 1. Sign in to Google Colab using a Google account (https://colab.research.google.com/)
