@@ -34,8 +34,17 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 [YOLO](https://pjreddie.com/darknet/yolo/) (You only look once) is used for both the armour location and identification algorithms. It's a state-of-the-art real-time object detection system, which can process images fast and achieve a high mAP. [CVAT](https://github.com/openvinotoolkit/cvat) is used for labelling images, and Google Colab is used for training. 
 
 ## User Stories
+### Product Backlog (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/RM-Koala%20Product%20Backlog%20v1.1.pdf)
+
+### Sprint 1 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%201/RM-Koala%20Sprin%201%20Output.pdf)
   1. [US1] locate the opponent robot’s armour in the pictures
   2. [US2] recognize the type of the armour pad the enemy is showing
+  
+### Sprint 2 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%202/RM-Koala%20Sprint%202%20Planning%20v1.0.pdf)
+  1. [US3] to have GUI of softrware to use/evaluate computer vision algorithm more easily 
+  2. [US4] to make armour location and armour identification algorithms work in conjunction to make product works faster
+  3. [US7] to make product locate multiple armours in the image
+  4. [US8] to make product identify types of multiple armours located in the input
   
 ## Change Logs
 ## [Released] 
