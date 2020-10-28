@@ -38,10 +38,20 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
   2. [US2] recognize the type of the armour pad the enemy is showing
   
 ## Change Logs
+## [Released] 
+## [v1.0]
+### Added
+### Changed
+## [v1.1]
+### Added
+### Changed
+## [v1.2]
+### Added
+### Changed
 
 ## Test Cases
 
-## User Guide (Release 1.0.0)
+## User Guide (Release v1.2)
 1. Sign in to Google Colab using a Google account (https://colab.research.google.com/)
 2. Upload the notebook to Google Colab 
   ``` notebook location: rm_ai_challenge_2020s2_koala/build/colab_notebook/RM_Koala_YOLO_approach.ipynb ```
