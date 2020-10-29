@@ -56,8 +56,9 @@ def slider_show_image(value):
     top = GUI_support.w
     top.image_file_state.set_current_img_num(int(value) - 1)
     top.image_label.configure(image=top.image_file_state.get_current_img())
-    labelled_image = LabelledImage(int(value)-1, top.image_file_state.filenames[int(value)-1], 0, armours=[])
-    write_output(top.Output, labelled_image)
+    # Show output if the images were already labelled.
+    if len(top.image_file_state.labelled_images) > 0:
+        write_output(top.Output, top.image_file_state.labelled_images[int(value) - 1])
 # ===============================================
 
 class Toplevel1:

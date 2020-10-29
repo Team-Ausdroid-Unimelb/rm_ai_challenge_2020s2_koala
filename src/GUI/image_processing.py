@@ -295,8 +295,10 @@ def image_detect(image_file_state):
         draw_labels(predictions_directory, labelled_image, filename, image, bboxes, classes, colors)
         labelled_images.append(labelled_image)
 
-    print("Armours lenght", len(labelled_images[0].armours))
     print("Labelling done.", round(time.perf_counter() - time_labelstart, 3), "s")
+    # Save labelled images output
+    image_file_state.set_labelled_images(labelled_images)
+
     print("Displaying predictions...")
     image_file_state.clear_all_images()  # clear all images
     image_file_state.set_current_img_num(0) # reset image number
@@ -311,7 +313,7 @@ def image_detect(image_file_state):
     top.image_label.configure(image = image_file_state.images[0])
 
     # Display first image output
-    write_output(top.Output, labelled_images[0])
+    write_output(top.Output, image_file_state.labelled_images[0])
 
     print("Predictions displayed.")
 

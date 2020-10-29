@@ -5,18 +5,22 @@ from pathlib import Path
 
 class ImageFileState:
     def __init__(self):
-        self.img_num = 0 # current image number
+        self.img_num = 0                # current image number
         self.filenames = None
         self.images_folder = None
-        self.images = []
+        self.images = []                # images files
         self.image_size = (1300, 600)
         self.config_files = {}
+        self.labelled_images = []       # labelled images output
     
     def set_file_names(self, file_names):
         self.filenames = file_names
     
     def set_images_folder(self, images_folder):
         self.images_folder = images_folder
+    
+    def set_labelled_images(self, labelled_images):
+        self.labelled_images = labelled_images
 
     def clear_all_images(self):
         self.images.clear()
