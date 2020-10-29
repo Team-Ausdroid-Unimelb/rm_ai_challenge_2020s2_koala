@@ -28,7 +28,7 @@ class ImageFileState:
         return self.images[self.img_num]
 
 # Function for opening the file explorer window
-def upload_images(slider, image_label, image_file_state):
+def upload_images(slider, image_label, image_file_state, label_button):
     # Get the filenames
     filenames = filedialog.askopenfilenames(initialdir="./", title="Select Images", filetypes=[("images", ".jpg .png")])
     
@@ -59,6 +59,8 @@ def upload_images(slider, image_label, image_file_state):
     
     # display the first image
     image_label.configure(image = image_file_state.images[0])
+    # make label button active
+    label_button.configure(state=NORMAL)
     return
 
 # next image button
