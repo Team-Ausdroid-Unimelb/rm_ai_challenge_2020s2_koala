@@ -130,35 +130,59 @@ def upload_config_files(image_file_state):
 
 
 def write_output(output, labelled_image):
+    output_array = []
     output.delete(1.0, END)
     output.tag_configure("bold", font=("Segoe UI", 9, "bold"))
     output.insert(END, "Image ID: ", "bold")
     output.insert(END, str(labelled_image.ID) + "\n")
+    a = "Image ID: "+str(labelled_image.ID) + "\n"
+    output_array.append(a)
     output.insert(END, "File Name: ", "bold")
     output.insert(END, str(labelled_image.filename) + "\n")
+    b = "File Name: "+ str(labelled_image.filename) + "\n"
+    output_array.append(b)
     output.insert(END, "Location Speed: ", "bold")
     output.insert(END, str(labelled_image.speed) + " fps\n")
+    c = "Location Speed: "+ str(labelled_image.speed) +" fps\n"
+    output_array.append(c)
     output.insert(END, "------\n")
+    output_array.append("------\n")
     output.insert(END, "--\n")
+    output_array.append("--\n")
     for armour in labelled_image.armours:
         print("Armour output")
+        
         output.insert(END, "Robot: ", "bold")
         output.insert(END, str(armour.robot) + "\n")
+        d = "Robot: "+ str(armour.robot) + "\n"
+        output_array.append (d)
         output.insert(END, "Pose: ", "bold")
         output.insert(END, str(armour.pose) + "\n")
+        e = "Pose: "+str(armour.pose) + "\n"
+        output_array.append(e)
         output.insert(END, "Armour Location: ", "bold")
         output.insert(END, "x=" + str(armour.location[0]) + "px, ")
         output.insert(END, "y=" + str(armour.location[1]) + "px, ")
         output.insert(END, "weight=" + str(armour.location[2]) + "px, ")
         output.insert(END, "height=" + str(armour.location[3]) + "px\n")
+        f = "Armour Location: "+ "x=" + str(armour.location[0]) + "px, " + "y=" + str(armour.location[1]) + "px, " + "weight=" + str(armour.location[2]) + "px, " + "height=" + str(armour.location[3]) + "px\n"
+        output_array.append(f)
         output.insert(END, "Confidence: ", "bold")
         output.insert(END, str(armour.confidence) + "\n")
+        g = "Confidence: " + str(armour.confidence) + "\n"
+        output_array.append(g)
         output.insert(END, "--\n")
+        output_array.append("--\n")
     output.insert(END, "------\n")
+    output_array.append("------\n")
+    export_file(output_array)
+    #return output_array
+    
 
 
-def export_file():
-    content = ["123", "456", "789"]
+def export_file(output):
+    #content = ["123", "456", "789"]
+    content = output
 
     """Save the current file as a new file."""
     filepath = filedialog.asksaveasfilename(

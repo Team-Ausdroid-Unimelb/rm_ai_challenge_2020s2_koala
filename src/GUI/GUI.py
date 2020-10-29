@@ -10,6 +10,7 @@ from image_processing import *
 from tkinter import filedialog
 from PIL import ImageTk,Image
 from filemanagement import *
+from predictions import *
 
 try:
     import Tkinter as tk
@@ -56,6 +57,8 @@ def slider_show_image(value):
     top = GUI_support.w
     top.image_file_state.set_current_img_num(int(value) - 1)
     top.image_label.configure(image=top.image_file_state.get_current_img())
+    labelled_image = LabelledImage(int(value)-1, top.image_file_state.filenames[int(value)-1], 0, armours=[])
+    write_output(top.Output, labelled_image)
 # ===============================================
 
 class Toplevel1:
@@ -85,10 +88,12 @@ class Toplevel1:
         self.algorithm_choose.grid(column=0, row=1)
         
         options = ["yolo-v4-tiny", "yolo-v3","yolo-v4","yolo-v5"]
-        clicked = StringVar()
-        clicked.set(options[0])
-        self.drop = tk.OptionMenu(top, clicked, *options)
-        self.drop.pack.grid(column=0, row=2)
+        #clicked = StringVar()
+        #clicked.set(options[0])
+        self.drop = tk.ttk.Combobox(top,values = options)
+        
+        self.drop.grid(column=0, row=2)
+        self.drop.current(0)
 
 
         self.Frame1 = tk.Frame(top)
