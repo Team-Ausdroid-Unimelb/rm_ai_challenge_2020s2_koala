@@ -17,6 +17,7 @@ except ImportError:
     import tkinter as tk
 
 try:
+
     import ttk
     py3 = False
 except ImportError:
@@ -29,6 +30,8 @@ def vp_start_gui():
     '''Starting point when module is the main routine.'''
     global val, w, root
     root = tk.Tk()
+    icon = tk.PhotoImage(file= r'C:\Users\kimmy\Desktop\rm_ai_challenge_2020s2_koala\src\GUI\RMlogo.png')
+    root.iconphoto(False, icon)
     top = Toplevel1 (root)
     GUI_support.init(root, top)
     root.mainloop()
@@ -56,6 +59,9 @@ def slider_show_image(value):
     top = GUI_support.w
     top.image_file_state.set_current_img_num(int(value) - 1)
     top.image_label.configure(image=top.image_file_state.get_current_img())
+    # Show output if the images were already labelled.
+    if len(top.image_file_state.labelled_images) > 0:
+        write_output(top.Output, top.image_file_state.labelled_images[int(value) - 1])
 # ===============================================
 
 class Toplevel1:
@@ -73,25 +79,10 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(False,  False)
-        top.title("New Toplevel")
+        top.title("Object Detection Algorithm Evaluation Tool")
         top.configure(background="#d9d9d9")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="black")
-
-        # ============================== combobox for algorithm choice ===============================
-        self.algorithm_choose = tk.Label(top,
-                    text = "Choose algorithm")
-
-        self.algorithm_choose.grid(column=0, row=1)
-        
-        options = ["yolo-v4-tiny", "yolo-v3","yolo-v4","yolo-v5"]
-        #clicked = StringVar()
-        #clicked.set(options[0])
-        self.drop = tk.ttk.Combobox(top,values = options)
-        
-        self.drop.grid(column=0, row=2)
-        self.drop.current(0)
-
 
         self.Frame1 = tk.Frame(top)
         self.Frame1.place(relx=0.028, rely=0.15, relheight=0.818, relwidth=0.753)
@@ -116,13 +107,27 @@ class Toplevel1:
         # self.Menu.configure(pady="0")
         # self.Menu.configure(text='''Menu''')
 
+        # ============================== combobox for algorithm choice ===============================
+        self.algorithm_choose = tk.Label(top,
+                    text = "Choose algorithm")
+
+        self.algorithm_choose.grid(column=0, row=1)
+        
+        options = ["yolo-v4-tiny", "yolo-v3","yolo-v4","yolo-v5"]
+        #clicked = StringVar()
+        #clicked.set(options[0])
+        self.drop = tk.ttk.Combobox(top,values = options)
+        
+        self.drop.grid(column=0, row=2)
+        self.drop.current(0)
+
 
         self.Slider = tk.Scale(top, from_=0.0, to=100.0)
         self.Slider.place(relx=0.222, rely=0.025, relwidth=0.175, relheight=0.0
                 , height=42, bordermode='ignore')
         self.Slider.configure(activebackground="#ececec")
         self.Slider.configure(background="#d9d9d9")
-        self.Slider.configure(command=slider_show_image)    # do image showing
+        self.Slider.configure(state=DISABLED, command=slider_show_image)    # do image showing
         self.Slider.configure(cursor="fleur")
         self.Slider.configure(foreground="#000000")
         self.Slider.configure(highlightbackground="#d9d9d9")
@@ -136,13 +141,26 @@ class Toplevel1:
         self.image_label.place(relx=0.028, rely=0.15, relheight=0.818, relwidth=0.753)
         # =============================================
 
+        self.Output = tk.Text(top)
+        self.Output.place(relx=0.803, rely=0.20, relheight=0.358, relwidth=0.169)
+        self.Output.configure(background="white")
+        self.Output.configure(font="TkTextFont")
+        self.Output.configure(foreground="black")
+        self.Output.configure(highlightbackground="#d9d9d9")
+        self.Output.configure(highlightcolor="black")
+        self.Output.configure(insertbackground="black")
+        self.Output.configure(relief="flat")
+        self.Output.configure(selectbackground="blue")
+        self.Output.configure(selectforeground="white")
+        self.Output.configure(wrap="word")
+        # self.Output.configure(state=DISABLED)
 
         self.Left_Arrow = tk.Button(top)
         self.Left_Arrow.place(relx=0.259, rely=0.087, height=34, width=47)
         self.Left_Arrow.configure(activebackground="#ececec")
         self.Left_Arrow.configure(activeforeground="#000000")
         self.Left_Arrow.configure(background="#000000")
-        self.Left_Arrow.configure(command=lambda: prev_image(self.Slider, self.image_label, self.image_file_state))    # prev image
+        self.Left_Arrow.configure(state=DISABLED, command=lambda: prev_image(self.Slider, self.image_label, self.image_file_state))    # prev image
         self.Left_Arrow.configure(disabledforeground="#a3a3a3")
         self.Left_Arrow.configure(font="-family {Segoe UI} -size 9 -weight bold")
         self.Left_Arrow.configure(foreground="#ffffff")
@@ -156,7 +174,7 @@ class Toplevel1:
         self.Right_Arrow.configure(activebackground="#ececec")
         self.Right_Arrow.configure(activeforeground="#000000")
         self.Right_Arrow.configure(background="#000000")
-        self.Right_Arrow.configure(command=lambda: next_image(self.Slider, self.image_label, self.image_file_state))   # next image
+        self.Right_Arrow.configure(state=DISABLED, command=lambda: next_image(self.Slider, self.image_label, self.image_file_state))   # next image
         self.Right_Arrow.configure(disabledforeground="#a3a3a3")
         self.Right_Arrow.configure(font="-family {Segoe UI} -size 9 -weight bold")
         self.Right_Arrow.configure(foreground="#ffffff")
@@ -175,19 +193,6 @@ class Toplevel1:
         # self.Frame2.configure(background="#ffffff")
         # self.Frame2.configure(highlightbackground="#d9d9d9")
         # self.Frame2.configure(highlightcolor="black")
-
-        self.Output = tk.Text(top)
-        self.Output.place(relx=0.803, rely=0.20, relheight=0.358, relwidth=0.169)
-        self.Output.configure(background="white")
-        self.Output.configure(font="TkTextFont")
-        self.Output.configure(foreground="black")
-        self.Output.configure(highlightbackground="#d9d9d9")
-        self.Output.configure(highlightcolor="black")
-        self.Output.configure(insertbackground="black")
-        self.Output.configure(relief="flat")
-        self.Output.configure(selectbackground="blue")
-        self.Output.configure(selectforeground="white")
-        self.Output.configure(wrap="word")
 
         self.Label1 = tk.Label(top)
         self.Label1.place(relx=0.803, rely=0.15, height=32, relwidth=0.169)
@@ -221,9 +226,9 @@ class Toplevel1:
         # create a pulldown menu, and add it to the menu bar
         self.filemenu = Menu(self.menubar, tearoff=0)
 
-        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run))
-        self.filemenu.add_command(label="Upload weight, name and config files as a zip", command=lambda: upload_config_files(self.image_file_state))
-        self.filemenu.add_command(label="export", command=lambda: export_file())
+        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run, self.Left_Arrow, self.Right_Arrow))
+        self.filemenu.add_command(label="Upload weights, names and config files as a .zip", command=lambda: upload_config_files(self.image_file_state))
+        self.filemenu.add_command(label="Export Output", command=lambda: export_file(self.image_file_state.export_content))
 
         self.menubar.add_cascade(label="Menu", menu=self.filemenu)
 
