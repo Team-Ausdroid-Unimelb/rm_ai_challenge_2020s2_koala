@@ -12,6 +12,7 @@ class ImageFileState:
         self.image_size = (1300, 600)
         self.config_files = {}
         self.labelled_images = []       # labelled images output
+        self.export_content = ""        # text to be exported with the export button
     
     def set_file_names(self, file_names):
         self.filenames = file_names
@@ -21,6 +22,9 @@ class ImageFileState:
     
     def set_labelled_images(self, labelled_images):
         self.labelled_images = labelled_images
+    
+    def set_export_content(self, export_content):
+        self.export_content = export_content
 
     def clear_all_images(self):
         self.images.clear()
@@ -143,7 +147,6 @@ def write_output(output, labelled_image):
     output.insert(END, "------\n")
     output.insert(END, "--\n")
     for armour in labelled_image.armours:
-        print("Armour output")
         output.insert(END, "Robot: ", "bold")
         output.insert(END, str(armour.robot) + "\n")
         output.insert(END, "Pose: ", "bold")
@@ -159,9 +162,7 @@ def write_output(output, labelled_image):
     output.insert(END, "------\n")
 
 
-def export_file():
-    content = ["123", "456", "789"]
-
+def export_file(content):
     """Save the current file as a new file."""
     filepath = filedialog.asksaveasfilename(
         defaultextension="txt",
@@ -171,4 +172,4 @@ def export_file():
         return
     with open(filepath, "w") as output_file:
         for i in content:
-            output_file.write(i + "\n")
+            output_file.write(i)

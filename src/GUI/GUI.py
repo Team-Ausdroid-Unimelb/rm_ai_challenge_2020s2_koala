@@ -150,6 +150,7 @@ class Toplevel1:
         self.Output.configure(selectbackground="blue")
         self.Output.configure(selectforeground="white")
         self.Output.configure(wrap="word")
+        # self.Output.configure(state=DISABLED)
 
         self.Left_Arrow = tk.Button(top)
         self.Left_Arrow.place(relx=0.259, rely=0.087, height=34, width=47)
@@ -224,7 +225,7 @@ class Toplevel1:
 
         self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run, self.Left_Arrow, self.Right_Arrow))
         self.filemenu.add_command(label="Upload weights, names and config files as a .zip", command=lambda: upload_config_files(self.image_file_state))
-        self.filemenu.add_command(label="Export Output", command=lambda: export_file())
+        self.filemenu.add_command(label="Export Output", command=lambda: export_file(self.image_file_state.export_content))
 
         self.menubar.add_cascade(label="Menu", menu=self.filemenu)
 

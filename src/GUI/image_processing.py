@@ -303,13 +303,20 @@ def image_detect(image_file_state):
     image_file_state.clear_all_images()  # clear all images
     image_file_state.set_current_img_num(0) # reset image number
 
-    for filename in filenames:
+    top = GUI_support.w
+    export_content = ""
+    for i, filename in enumerate(filenames):
         im = Image.open(predictions_directory / filename.name)
         im.thumbnail(image_file_state.image_size, Image.ANTIALIAS)
         image_file_state.images.append(ImageTk.PhotoImage(im))
+        # Save the labelled images output data
+        write_output(top.Output, image_file_state.labelled_images[i])
+        export_content = export_content + "\n" + str(top.Output.get(1.0, END))
+
+    # Save export content
+    image_file_state.set_export_content(export_content)
     
     # Display the first image
-    top = GUI_support.w
     top.image_label.configure(image = image_file_state.images[0])
 
     # Display first image output
