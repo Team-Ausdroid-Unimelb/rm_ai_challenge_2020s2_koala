@@ -121,19 +121,6 @@ class Toplevel1:
         self.image_label.place(relx=0.028, rely=0.15, relheight=0.818, relwidth=0.753)
         # =============================================
 
-        # menu =======================================
-        self.menubar = tk.Menu(top)
-        # create a pulldown menu, and add it to the menu bar
-        self.filemenu = Menu(self.menubar, tearoff=0)
-
-        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state))
-        self.filemenu.add_command(label="Upload weight, name and config files as a zip", command=lambda: upload_config_files(self.image_file_state))
-        self.filemenu.add_command(label="export", command=lambda: export_file())
-
-        self.menubar.add_cascade(label="Menu", menu=self.filemenu)
-
-        top.config(menu=self.menubar)
-        # =============================================
 
         self.Left_Arrow = tk.Button(top)
         self.Left_Arrow.place(relx=0.259, rely=0.087, height=34, width=47)
@@ -204,7 +191,7 @@ class Toplevel1:
         self.Run.configure(activebackground="#ececec")
         self.Run.configure(activeforeground="#000000")
         self.Run.configure(background="#000000")
-        self.Run.configure(command = lambda: image_detect(self.image_file_state)) # Detecting the images
+        self.Run.configure(state=DISABLED, command = lambda: image_detect(self.image_file_state)) # Detecting the images
         self.Run.configure(cursor="fleur")
         self.Run.configure(disabledforeground="#a3a3a3")
         self.Run.configure(font="-family {Segoe UI} -size 9 -weight bold")
@@ -213,6 +200,20 @@ class Toplevel1:
         self.Run.configure(highlightcolor="black")
         self.Run.configure(pady="0")
         self.Run.configure(text='''Label''')
+
+        # menu =======================================
+        self.menubar = tk.Menu(top)
+        # create a pulldown menu, and add it to the menu bar
+        self.filemenu = Menu(self.menubar, tearoff=0)
+
+        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run))
+        self.filemenu.add_command(label="Upload weight, name and config files as a zip", command=lambda: upload_config_files(self.image_file_state))
+        self.filemenu.add_command(label="export", command=lambda: export_file())
+
+        self.menubar.add_cascade(label="Menu", menu=self.filemenu)
+
+        top.config(menu=self.menubar)
+        # =============================================
 
 if __name__ == '__main__':
     vp_start_gui()

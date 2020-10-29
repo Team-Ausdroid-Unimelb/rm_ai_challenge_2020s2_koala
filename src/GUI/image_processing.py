@@ -9,6 +9,8 @@ from PIL import ImageTk,Image
 import GUI_support
 import tkinter as tk
 from predictions import LabelledImage, Armour
+from tkinter import messagebox
+
 
 WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
 CFG = 'config/yolov4-tiny_7class_mod.cfg'
@@ -243,13 +245,26 @@ def draw_labels(predictions_directory, labelled_image, filename, image, bboxes, 
 
 
 def image_detect(image_file_state):
+    ### check if there's any image uploaded
+    filenames = image_file_state.filenames
+    if not filenames: # no image files are uploaded
+        messagebox.showinfo('Information', 'Please upload images frst')
+        return
+
+    ### check if all config files have been uploaded by the user ###
+    print("checking config files")
+    files_needed = ["names", "cfg", "weights"]
+    # check if all required files are present. If not, show a popup
+    for file in files_needed:
+        if file not in image_file_state.config_files:
+            messagebox.showinfo('Information', 'Please upload names, cfg and weights files first')
+            return
+    # check if there's any image uploaded
+
+    
     ## Load necessary files for model (must do this before detection)
     model, output_layers, classes, colors = load_model(WEIGHTS, CFG, NAMES)
     mode = 2
-
-    filenames = image_file_state.filenames
-    if not filenames: # no files are selected
-        return
     
     # Get the folder from where the images were uploaded.
     images_directory = image_file_state.images_folder
