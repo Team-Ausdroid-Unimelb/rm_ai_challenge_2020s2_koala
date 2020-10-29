@@ -9,6 +9,7 @@ from PIL import ImageTk,Image
 import GUI_support
 import tkinter as tk
 from predictions import LabelledImage, Armour
+from filemanagement import *
 
 WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
 CFG = 'config/yolov4-tiny_7class_mod.cfg'
@@ -214,6 +215,7 @@ def draw_labels(predictions_directory, labelled_image, filename, image, bboxes, 
     font = cv2.FONT_HERSHEY_PLAIN
 
     for i in range(len(bboxes)):
+        print("One box.")
         
         bbox, confidence, class_id, text = bboxes[i]
 
@@ -229,7 +231,7 @@ def draw_labels(predictions_directory, labelled_image, filename, image, bboxes, 
             pose = ""
 
         confidence = round(confidence, 3)
-        armour = Armour(robot, pose, [bbox], confidence)
+        armour = Armour(robot, pose, bbox, confidence)
         labelled_image.armours.append(armour)
 
         label = robot + "_" + pose + "  " + str(confidence)
@@ -258,20 +260,24 @@ def image_detect(image_file_state):
     Path.mkdir(predictions_directory, exist_ok=True)
     
     print("Labelling...")
+    labelled_image = None
+    labelled_images = []
     time_labelstart = time.perf_counter()
     # Select and draw bounding boxes on every image.
     for i, filename in enumerate(filenames):
-        # print(filename)
+        print(filename.name)
         image_path = os.path.abspath(filename)
         tstart = time.perf_counter()
         image = load_image(image_path)
         bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
         speed = 1 / (time.perf_counter() - tstart)
         # Labelled Image Data
-        labelled_image = LabelledImage(i, filename.name, speed)
+        labelled_image = LabelledImage(i, filename.name, round(speed,2), armours=[])
         draw_labels(predictions_directory, labelled_image, filename, image, bboxes, classes, colors)
+        labelled_images.append(labelled_image)
 
-    print("Labelling done.", time.perf_counter() - time_labelstart, "s")
+    print("Armours lenght", len(labelled_images[0].armours))
+    print("Labelling done.", round(time.perf_counter() - time_labelstart, 3), "s")
     print("Displaying predictions...")
     image_file_state.clear_all_images()  # clear all images
     image_file_state.set_current_img_num(0) # reset image number
@@ -286,7 +292,7 @@ def image_detect(image_file_state):
     top.image_label.configure(image = image_file_state.images[0])
 
     # Display first image output
-    top.Output.insert(tk.END, "First Image Output. Testing.")
+    write_output(top.Output, labelled_images[0])
 
     print("Predictions displayed.")
 
