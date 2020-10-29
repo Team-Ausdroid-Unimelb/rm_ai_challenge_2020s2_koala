@@ -73,7 +73,7 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(False,  False)
-        top.title("New Toplevel")
+        top.title("Object Detection Algorithm Evaluation Tool")
         top.configure(background="#d9d9d9")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="black")
@@ -107,7 +107,7 @@ class Toplevel1:
                 , height=42, bordermode='ignore')
         self.Slider.configure(activebackground="#ececec")
         self.Slider.configure(background="#d9d9d9")
-        self.Slider.configure(command=slider_show_image)    # do image showing
+        self.Slider.configure(state=DISABLED, command=slider_show_image)    # do image showing
         self.Slider.configure(cursor="fleur")
         self.Slider.configure(foreground="#000000")
         self.Slider.configure(highlightbackground="#d9d9d9")
@@ -127,7 +127,7 @@ class Toplevel1:
         self.Left_Arrow.configure(activebackground="#ececec")
         self.Left_Arrow.configure(activeforeground="#000000")
         self.Left_Arrow.configure(background="#000000")
-        self.Left_Arrow.configure(command=lambda: prev_image(self.Slider, self.image_label, self.image_file_state))    # prev image
+        self.Left_Arrow.configure(state=DISABLED, command=lambda: prev_image(self.Slider, self.image_label, self.image_file_state))    # prev image
         self.Left_Arrow.configure(disabledforeground="#a3a3a3")
         self.Left_Arrow.configure(font="-family {Segoe UI} -size 9 -weight bold")
         self.Left_Arrow.configure(foreground="#ffffff")
@@ -141,7 +141,7 @@ class Toplevel1:
         self.Right_Arrow.configure(activebackground="#ececec")
         self.Right_Arrow.configure(activeforeground="#000000")
         self.Right_Arrow.configure(background="#000000")
-        self.Right_Arrow.configure(command=lambda: next_image(self.Slider, self.image_label, self.image_file_state))   # next image
+        self.Right_Arrow.configure(state=DISABLED, command=lambda: next_image(self.Slider, self.image_label, self.image_file_state))   # next image
         self.Right_Arrow.configure(disabledforeground="#a3a3a3")
         self.Right_Arrow.configure(font="-family {Segoe UI} -size 9 -weight bold")
         self.Right_Arrow.configure(foreground="#ffffff")
@@ -206,9 +206,9 @@ class Toplevel1:
         # create a pulldown menu, and add it to the menu bar
         self.filemenu = Menu(self.menubar, tearoff=0)
 
-        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run))
-        self.filemenu.add_command(label="Upload weight, name and config files as a zip", command=lambda: upload_config_files(self.image_file_state))
-        self.filemenu.add_command(label="export", command=lambda: export_file())
+        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run, self.Left_Arrow, self.Right_Arrow))
+        self.filemenu.add_command(label="Upload weights, names and config files as a .zip", command=lambda: upload_config_files(self.image_file_state))
+        self.filemenu.add_command(label="Export Output", command=lambda: export_file())
 
         self.menubar.add_cascade(label="Menu", menu=self.filemenu)
 

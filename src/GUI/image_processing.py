@@ -13,9 +13,9 @@ from filemanagement import *
 from tkinter import messagebox
 
 
-WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
-CFG = 'config/yolov4-tiny_7class_mod.cfg'
-NAMES = 'config/rm_combine.names'
+# WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
+# CFG = 'config/yolov4-tiny_7class_mod.cfg'
+# NAMES = 'config/rm_combine.names'
 CONFIDENCE_THRESHOLD = 0.3
 
 def imShow(img_path):
@@ -250,7 +250,7 @@ def image_detect(image_file_state):
     ### check if there's any image uploaded
     filenames = image_file_state.filenames
     if not filenames: # no image files are uploaded
-        messagebox.showinfo('Information', 'Please upload images frst')
+        messagebox.showinfo('Information', 'Please upload images first')
         return
 
     ### check if all config files have been uploaded by the user ###
@@ -265,7 +265,10 @@ def image_detect(image_file_state):
 
     
     ## Load necessary files for model (must do this before detection)
-    model, output_layers, classes, colors = load_model(WEIGHTS, CFG, NAMES)
+    weights = image_file_state.config_files["weights"]
+    cfg = image_file_state.config_files["cfg"]
+    names = image_file_state.config_files["names"]
+    model, output_layers, classes, colors = load_model(weights, cfg, names)
     mode = 2
     
     # Get the folder from where the images were uploaded.
@@ -282,8 +285,9 @@ def image_detect(image_file_state):
     for i, filename in enumerate(filenames):
         print(filename.name)
         image_path = os.path.abspath(filename)
-        tstart = time.perf_counter()
+        # tstart = time.perf_counter()
         image = load_image(image_path)
+        tstart = time.perf_counter()
         bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
         speed = 1 / (time.perf_counter() - tstart)
         # Labelled Image Data

@@ -28,7 +28,7 @@ class ImageFileState:
         return self.images[self.img_num]
 
 # Function for opening the file explorer window
-def upload_images(slider, image_label, image_file_state, label_button):
+def upload_images(slider, image_label, image_file_state, label_button, left_arrow, right_arrow):
     # Get the filenames
     filenames = filedialog.askopenfilenames(initialdir="./", title="Select Images", filetypes=[("images", ".jpg .png")])
     
@@ -59,8 +59,11 @@ def upload_images(slider, image_label, image_file_state, label_button):
     
     # display the first image
     image_label.configure(image = image_file_state.images[0])
-    # make label button active
+    # make buttons active
     label_button.configure(state=NORMAL)
+    slider.configure(state=NORMAL)
+    left_arrow.configure(state=NORMAL)
+    right_arrow.configure(state=NORMAL)
     return
 
 # next image button
@@ -122,10 +125,11 @@ def upload_config_files(image_file_state):
     # check if all required files are present. If not, print an error message
     for file in files_needed:
         if file not in image_file_state.config_files:
-            messagebox.showinfo('Information', 'Please include names, cfg and weights files in the zip')
+            messagebox.showinfo('Information', 'Please include weights, cfg and names files in the .zip')
             image_file_state.config_files.clear() # remove all existing files
             return
-
+    
+    messagebox.showinfo('Information', 'Files were uploaded successfully.')
     print(image_file_state.config_files)
 
 
