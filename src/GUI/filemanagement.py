@@ -79,9 +79,6 @@ def next_image(slider, image_label, image_file_state):
     image_file_state.set_current_img_num(image_file_state.img_num + 1)
     slider.set(image_file_state.img_num + 1)
 
-    image_label.configure(image=image_file_state.images[image_file_state.img_num])
-
-    # print(img_num)
 
 def prev_image(slider, image_label, image_file_state):
 
@@ -92,9 +89,6 @@ def prev_image(slider, image_label, image_file_state):
     image_file_state.set_current_img_num(image_file_state.img_num - 1)
     slider.set(image_file_state.img_num + 1)
 
-    image_label.configure(image=image_file_state.images[image_file_state.img_num])
-
-    # print(img_num)
 
 def upload_config_files(image_file_state):
     from zipfile import ZipFile

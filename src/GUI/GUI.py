@@ -138,6 +138,18 @@ class Toplevel1:
         self.image_label.place(relx=0.028, rely=0.15, relheight=0.818, relwidth=0.753)
         # =============================================
 
+        self.Output = tk.Text(top)
+        self.Output.place(relx=0.803, rely=0.20, relheight=0.358, relwidth=0.169)
+        self.Output.configure(background="white")
+        self.Output.configure(font="TkTextFont")
+        self.Output.configure(foreground="black")
+        self.Output.configure(highlightbackground="#d9d9d9")
+        self.Output.configure(highlightcolor="black")
+        self.Output.configure(insertbackground="black")
+        self.Output.configure(relief="flat")
+        self.Output.configure(selectbackground="blue")
+        self.Output.configure(selectforeground="white")
+        self.Output.configure(wrap="word")
 
         self.Left_Arrow = tk.Button(top)
         self.Left_Arrow.place(relx=0.259, rely=0.087, height=34, width=47)
@@ -177,19 +189,6 @@ class Toplevel1:
         # self.Frame2.configure(background="#ffffff")
         # self.Frame2.configure(highlightbackground="#d9d9d9")
         # self.Frame2.configure(highlightcolor="black")
-
-        self.Output = tk.Text(top)
-        self.Output.place(relx=0.803, rely=0.20, relheight=0.358, relwidth=0.169)
-        self.Output.configure(background="white")
-        self.Output.configure(font="TkTextFont")
-        self.Output.configure(foreground="black")
-        self.Output.configure(highlightbackground="#d9d9d9")
-        self.Output.configure(highlightcolor="black")
-        self.Output.configure(insertbackground="black")
-        self.Output.configure(relief="flat")
-        self.Output.configure(selectbackground="blue")
-        self.Output.configure(selectforeground="white")
-        self.Output.configure(wrap="word")
 
         self.Label1 = tk.Label(top)
         self.Label1.place(relx=0.803, rely=0.15, height=32, relwidth=0.169)
