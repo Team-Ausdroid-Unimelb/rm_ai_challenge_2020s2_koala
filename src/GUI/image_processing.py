@@ -8,6 +8,7 @@ from pathlib import Path
 from PIL import ImageTk,Image
 import GUI_support
 import tkinter as tk
+from predictions import LabelledImage, Armour
 
 WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
 CFG = 'config/yolov4-tiny_7class_mod.cfg'
@@ -87,6 +88,9 @@ def get_nms_bboxes(outputs, height, width, confidence_threshold, classes):
     ## Calculate Non-Maximum Supression bounding boxes (remove highly overlapped bboxes)
     indexes = cv2.dnn.NMSBoxes(bboxes, confidences, confidence_threshold, 0.4)
     
+    if len(indexes) == 0:
+        return list()
+    
     for i in indexes.flatten():
         nms_bboxes.append([bboxes[i], confidences[i], class_ids[i], str(classes[class_ids[i]])])
 
@@ -94,28 +98,27 @@ def get_nms_bboxes(outputs, height, width, confidence_threshold, classes):
 
 
 ## Get the largest armor bounding box in the picture
-def get_largest_bbox(nms_bboxes, filename):
+def get_largest_bbox(nms_bboxes):
     
     pose_bboxes = [bbox for bbox in nms_bboxes if bbox[2] > 3]
     armor_bboxes = [bbox for bbox in nms_bboxes if bbox[2] <= 3]
     
+    if len(armor_bboxes) == 0:
+        return list()
+    
     max_area = 0
     
-    if len(armor_bboxes) == 0:
-        print("No armour detected in", filename.name)
-        return pose_bboxes
-    else:
-        for armor_bbox in armor_bboxes:
-            
-            bbox, confidence, class_id, text = armor_bbox
-            
-            if bbox[2] * bbox[3] > max_area:
-                max_area, largest_bbox = bbox[2] * bbox[3], armor_bbox
+    for armor_bbox in armor_bboxes:
         
-        if max_area == 0:
-            largest_bbox = armor_bboxes[0]
+        bbox, confidence, class_id, text = armor_bbox
+        
+        if bbox[2] * bbox[3] > max_area:
+            max_area, largest_bbox = bbox[2] * bbox[3], armor_bbox
+            
+    if len(pose_bboxes) == 0:
+        return [largest_bbox]
 
-        return append_pose([largest_bbox], pose_bboxes)
+    return append_pose([largest_bbox], pose_bboxes)
 
 
 ## Get the largest armor bounding boxes for 4 armor types in the picture
@@ -123,6 +126,9 @@ def get_largest_bboxes(nms_bboxes):
     
     pose_bboxes = [bbox for bbox in nms_bboxes if bbox[2] > 3]
     armor_bboxes = [bbox for bbox in nms_bboxes if bbox[2] <= 3]
+    
+    if len(armor_bboxes) == 0:
+        return list()
     
     max_bbox_area = [0] * 4
     max_bbox_index = [-1] * 4
@@ -142,6 +148,9 @@ def get_largest_bboxes(nms_bboxes):
         filtered_armor_bboxes.append(armor_bboxes[i])
         
 #     print(filtered_armor_bboxes)
+
+    if len(pose_bboxes) == 0:
+        return filtered_armor_bboxes
         
     return append_pose(filtered_armor_bboxes, pose_bboxes)
 
@@ -166,13 +175,13 @@ def append_pose(armor_bboxes, pose_bboxes):
             if contain_bbox(bbox_out, bbox_in):
                 break
                 
-        armor_bboxes[i][3] = text_in + '_' + text_out
+        armor_bboxes[i][3] = [text_in, text_out] #text_in + '_' + text_out
         
     return armor_bboxes
 
 
 # accepts image and outputs layers as parameters
-def positioning_bboxes(image, model, output_layers, classes, filename, mode = 3):
+def positioning_bboxes(image, model, output_layers, classes, mode = 3):
     
     height, width, channels = image.shape
     
@@ -189,7 +198,7 @@ def positioning_bboxes(image, model, output_layers, classes, filename, mode = 3)
 
     ## Mode 2 - Find the largest armor pad and identify the pose
     if mode == 2:
-        return get_largest_bbox(nms_bboxes, filename)
+        return get_largest_bbox(nms_bboxes)
     
     ## Mode 3 - Consider the possibility of multiple robots in the image
     elif mode == 3:
@@ -200,7 +209,7 @@ def positioning_bboxes(image, model, output_layers, classes, filename, mode = 3)
         return nms_bboxes
 
 ## Draw the predicted bounding boxes and labels on the image
-def draw_labels(predictions_directory, filename, image, bboxes, classes, colors): 
+def draw_labels(predictions_directory, labelled_image, filename, image, bboxes, classes, colors): 
     
     font = cv2.FONT_HERSHEY_PLAIN
 
@@ -209,7 +218,21 @@ def draw_labels(predictions_directory, filename, image, bboxes, classes, colors)
         bbox, confidence, class_id, text = bboxes[i]
 
         x, y, w, h = bbox
-        label = text + "  " + str(round(confidence, 3))
+        if len(text) > 1:
+            robot = text[0]
+            pose = text[1]
+        elif len(text) == 1:
+            robot = text[0]
+            pose = ""
+        else:
+            robot = ""
+            pose = ""
+
+        confidence = round(confidence, 3)
+        armour = Armour(robot, pose, [bbox], confidence)
+        labelled_image.armours.append(armour)
+
+        label = robot + "_" + pose + "  " + str(confidence)
         color = colors[class_id]
         cv2.rectangle(image, (x,y), (x+w, y+h), color, 2)
         cv2.putText(image, label, (x, y - 5), font, 1, color, 1)
@@ -217,9 +240,6 @@ def draw_labels(predictions_directory, filename, image, bboxes, classes, colors)
     ## Output prediction result to file
     path = predictions_directory / filename.name
     cv2.imwrite(os.path.abspath(path), image)
-    
-    ## Show prediction result
-    # imShow('prediction.jpg')
 
 
 def image_detect(image_file_state):
@@ -237,19 +257,22 @@ def image_detect(image_file_state):
     predictions_directory = images_directory / "predictions"
     Path.mkdir(predictions_directory, exist_ok=True)
     
+    print("Labelling...")
+    time_labelstart = time.perf_counter()
     # Select and draw bounding boxes on every image.
-    for filename in filenames:
+    for i, filename in enumerate(filenames):
         # print(filename)
         image_path = os.path.abspath(filename)
         tstart = time.perf_counter()
         image = load_image(image_path)
-        bboxes = positioning_bboxes(image, model, output_layers, classes, filename, mode)
-        # print('processing time on CPU: ', time.perf_counter() - tstart)
-        draw_labels(predictions_directory, filename, image, bboxes, classes, colors)
-        # print('processing time on CPU: ', time.perf_counter() - tstart)
+        bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
+        speed = 1 / (time.perf_counter() - tstart)
+        # Labelled Image Data
+        labelled_image = LabelledImage(i, filename.name, speed)
+        draw_labels(predictions_directory, labelled_image, filename, image, bboxes, classes, colors)
 
-    print("Labelling done.")
-    print("Displaying predictions.")
+    print("Labelling done.", time.perf_counter() - time_labelstart, "s")
+    print("Displaying predictions...")
     image_file_state.clear_all_images()  # clear all images
     image_file_state.set_current_img_num(0) # reset image number
 
@@ -258,11 +281,11 @@ def image_detect(image_file_state):
         im.thumbnail(image_file_state.image_size, Image.ANTIALIAS)
         image_file_state.images.append(ImageTk.PhotoImage(im))
     
+    # Display the first image
     top = GUI_support.w
-    # display the first image
     top.image_label.configure(image = image_file_state.images[0])
 
-    # Display output
+    # Display first image output
     top.Output.insert(tk.END, "First Image Output. Testing.")
 
     print("Predictions displayed.")
