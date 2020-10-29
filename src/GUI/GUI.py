@@ -78,6 +78,19 @@ class Toplevel1:
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="black")
 
+        # ============================== combobox for algorithm choice ===============================
+        self.algorithm_choose = tk.Label(top,
+                    text = "Choose algorithm")
+
+        self.algorithm_choose.grid(column=0, row=1)
+        
+        options = ["yolo-v4-tiny", "yolo-v3","yolo-v4","yolo-v5"]
+        clicked = StringVar()
+        clicked.set(options[0])
+        self.drop = tk.OptionMenu(top, clicked, *options)
+        self.drop.pack.grid(column=0, row=2)
+
+
         self.Frame1 = tk.Frame(top)
         self.Frame1.place(relx=0.028, rely=0.15, relheight=0.818, relwidth=0.753)
 
