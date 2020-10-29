@@ -101,6 +101,18 @@ class Toplevel1:
         # self.Menu.configure(pady="0")
         # self.Menu.configure(text='''Menu''')
 
+        # ============================== combobox for algorithm choice ===============================
+        self.algorithm_choose = tk.Label(top,
+                    text = "Choose algorithm")
+
+        self.algorithm_choose.grid(column=0, row=1)
+        
+        options = ["yolo-v4-tiny", "yolo-v3","yolo-v4","yolo-v5"]
+        clicked = StringVar()
+        clicked.set(options[0])
+        self.drop = tk.OptionMenu(top, clicked, *options)
+        self.drop.pack.grid(column=0, row=2)
+
 
         self.Slider = tk.Scale(top, from_=0.0, to=100.0)
         self.Slider.place(relx=0.222, rely=0.025, relwidth=0.175, relheight=0.0
