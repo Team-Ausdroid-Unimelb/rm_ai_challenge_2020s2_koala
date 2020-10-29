@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog, messagebox
 from PIL import ImageTk,Image
 from pathlib import Path
+import GUI_support
 
 class ImageFileState:
     def __init__(self):
@@ -26,6 +27,12 @@ class ImageFileState:
     def set_export_content(self, export_content):
         self.export_content = export_content
 
+    def clear_labelled_images(self):
+        self.labelled_images = []
+
+    def clear_export_content(self):
+        self.export_content = ""
+
     def clear_all_images(self):
         self.images.clear()
     
@@ -36,7 +43,7 @@ class ImageFileState:
         return self.images[self.img_num]
 
 # Function for opening the file explorer window
-def upload_images(slider, image_label, image_file_state, label_button, left_arrow, right_arrow):
+def upload_images(slider, image_label, image_file_state, label_button, left_arrow, right_arrow, output):
     # Get the filenames
     filenames = filedialog.askopenfilenames(initialdir="./", title="Select Images", filetypes=[("images", ".jpg .png")])
     
@@ -52,8 +59,10 @@ def upload_images(slider, image_label, image_file_state, label_button, left_arro
     image_file_state.set_file_names(standard_filenames)
 
     # at least one file is selected
-    image_file_state.clear_all_images()  # clear all images
-    image_file_state.set_current_img_num(0) # reset image number
+    image_file_state.clear_all_images()         # clear all images
+    image_file_state.clear_labelled_images()    # clear labelled imaged output
+    image_file_state.clear_export_content()     # clear export content
+    image_file_state.set_current_img_num(0)     # reset image number
 
     # reset slider
     slider.configure(from_ = 1, to = len(image_file_state.filenames)) 
@@ -67,6 +76,10 @@ def upload_images(slider, image_label, image_file_state, label_button, left_arro
     
     # display the first image
     image_label.configure(image = image_file_state.images[0])
+
+    # Clear output board
+    output.delete(1.0, END)
+
     # make buttons active
     label_button.configure(state=NORMAL)
     slider.configure(state=NORMAL)
@@ -102,7 +115,7 @@ def upload_config_files(image_file_state):
     file_name = filedialog.askopenfilename(initialdir="./", title="Select a zip file that contains weight, name and zip file", 
                                             filetypes=[("zip", ".zip")])
     if not file_name:
-        print("no file chosen")
+        print("No file chosen.")
         return
     # open the zip file in READ mode 
     with ZipFile(file_name, 'r') as zip: 
@@ -132,7 +145,7 @@ def upload_config_files(image_file_state):
             return
     
     messagebox.showinfo('Information', 'Files were uploaded successfully.')
-    print(image_file_state.config_files)
+    print("Config files uploaded.")
 
 
 def write_output(output, labelled_image):
@@ -173,3 +186,9 @@ def export_file(content):
     with open(filepath, "w") as output_file:
         for i in content:
             output_file.write(i)
+
+def print(*args):
+    top = GUI_support.w
+    for arg in args:
+        top.Console.insert(END, str(arg))
+    top.Console.insert(END, "\n")

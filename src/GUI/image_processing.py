@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 import time
@@ -12,23 +11,7 @@ from predictions import LabelledImage, Armour
 from filemanagement import *
 from tkinter import messagebox
 
-
-# WEIGHTS = 'config/yolov4-tiny_7class_mod_final.weights'
-# CFG = 'config/yolov4-tiny_7class_mod.cfg'
-# NAMES = 'config/rm_combine.names'
-CONFIDENCE_THRESHOLD = 0.3
-
-def imShow(img_path):
-    image = cv2.imread(img_path)
-    height, width = image.shape[:2]
-    resized_image = cv2.resize(image,(3*width, 3*height), interpolation = cv2.INTER_CUBIC)
-
-    fig = plt.gcf()
-    fig.set_size_inches(18, 10)
-    plt.axis("off")
-    plt.imshow(cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB))
-    plt.show()
-
+CONFIDENCE_THRESHOLD = 0.05
 
 ## Load necessary files for model
 def load_model(weights, cfg, names):
@@ -217,7 +200,6 @@ def draw_labels(predictions_directory, labelled_image, filename, image, bboxes, 
     font = cv2.FONT_HERSHEY_PLAIN
 
     for i in range(len(bboxes)):
-        print("One box.")
         
         bbox, confidence, class_id, text = bboxes[i]
 
@@ -247,6 +229,7 @@ def draw_labels(predictions_directory, labelled_image, filename, image, bboxes, 
 
 
 def image_detect(image_file_state):
+
     ### check if there's any image uploaded
     filenames = image_file_state.filenames
     if not filenames: # no image files are uploaded
@@ -254,22 +237,21 @@ def image_detect(image_file_state):
         return
 
     ### check if all config files have been uploaded by the user ###
-    print("checking config files")
+    print("Checking config files...")
     files_needed = ["names", "cfg", "weights"]
     # check if all required files are present. If not, show a popup
     for file in files_needed:
         if file not in image_file_state.config_files:
             messagebox.showinfo('Information', 'Please upload names, cfg and weights files first')
+            print("No compatible config files were found.")
             return
-    # check if there's any image uploaded
 
-    
     ## Load necessary files for model (must do this before detection)
     weights = image_file_state.config_files["weights"]
     cfg = image_file_state.config_files["cfg"]
     names = image_file_state.config_files["names"]
     model, output_layers, classes, colors = load_model(weights, cfg, names)
-    mode = 2
+    mode = 3
     
     # Get the folder from where the images were uploaded.
     images_directory = image_file_state.images_folder
@@ -280,13 +262,14 @@ def image_detect(image_file_state):
     print("Labelling...")
     labelled_image = None
     labelled_images = []
+    image_file_state.clear_labelled_images() # clear labelled images output
     time_labelstart = time.perf_counter()
     # Select and draw bounding boxes on every image.
     for i, filename in enumerate(filenames):
-        print(filename.name)
         image_path = os.path.abspath(filename)
-        # tstart = time.perf_counter()
+        # Load the image
         image = load_image(image_path)
+        # Predict labels
         tstart = time.perf_counter()
         bboxes = positioning_bboxes(image, model, output_layers, classes, mode)
         speed = 1 / (time.perf_counter() - tstart)
@@ -295,13 +278,14 @@ def image_detect(image_file_state):
         draw_labels(predictions_directory, labelled_image, filename, image, bboxes, classes, colors)
         labelled_images.append(labelled_image)
 
-    print("Labelling done.", round(time.perf_counter() - time_labelstart, 3), "s")
+    print("Labelling done in ", round(time.perf_counter() - time_labelstart, 3), "s")
     # Save labelled images output
     image_file_state.set_labelled_images(labelled_images)
 
     print("Displaying predictions...")
     image_file_state.clear_all_images()  # clear all images
     image_file_state.set_current_img_num(0) # reset image number
+    image_file_state.clear_export_content() # clear export content
 
     top = GUI_support.w
     export_content = ""

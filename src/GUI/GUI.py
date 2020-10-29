@@ -29,6 +29,7 @@ def vp_start_gui():
     '''Starting point when module is the main routine.'''
     global val, w, root
     root = tk.Tk()
+    GUI_support.set_Tk_var()
     top = Toplevel1 (root)
     GUI_support.init(root, top)
     root.mainloop()
@@ -70,20 +71,37 @@ class Toplevel1:
         _compcolor = '#d9d9d9' # X11 color: 'gray85'
         _ana1color = '#d9d9d9' # X11 color: 'gray85'
         _ana2color = '#ececec' # Closest X11 color: 'gray92'
+        self.style = ttk.Style()
+        if sys.platform == "win32":
+            self.style.theme_use('winnative')
+        self.style.configure('.',background=_bgcolor)
+        self.style.configure('.',foreground=_fgcolor)
+        self.style.configure('.',font="TkDefaultFont")
+        self.style.map('.',background=
+            [('selected', _compcolor), ('active',_ana2color)])
 
-        # top.geometry("1083x802+330+136")
-        top.geometry("1500x660")
+        top.geometry("1500x700") # top.geometry("1500x660")
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(False,  False)
+        # top.geometry("1198x802+266+116")
+        # top.minsize(120, 1)
+        # top.maxsize(3844, 1061)
+        # top.resizable(1,  1)
         top.title("Object Detection Algorithm Evaluation Tool")
         top.configure(background="#d9d9d9")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="black")
 
-        self.Frame1 = tk.Frame(top)
-        self.Frame1.place(relx=0.028, rely=0.15, relheight=0.818, relwidth=0.753)
+        self.Frame_Top = tk.Frame(top)
+        self.Frame_Top.place(relx=0.015, rely=0.012, relheight=0.131, relwidth=0.755)
+        self.Frame_Top.configure(relief='groove')
+        self.Frame_Top.configure(borderwidth="2")
+        self.Frame_Top.configure(relief="groove")
+        self.Frame_Top.configure(background="#d9d9d9")
 
+        self.Frame1 = tk.Frame(top)
+        self.Frame1.place(relx=0.015, rely=0.15, relheight=0.818, relwidth=0.755)
         self.Frame1.configure(relief='groove')
         self.Frame1.configure(borderwidth="2")
         self.Frame1.configure(relief="groove")
@@ -91,37 +109,23 @@ class Toplevel1:
         self.Frame1.configure(highlightbackground="#d9d9d9")
         self.Frame1.configure(highlightcolor="black")
 
-        # self.Menu = tk.Button(top)
-        # self.Menu.place(relx=0.028, rely=0.025, height=34, width=77)
-        # self.Menu.configure(activebackground="#ececec")
-        # self.Menu.configure(activeforeground="#000000")
-        # self.Menu.configure(background="#000000")
-        # self.Menu.configure(disabledforeground="#a3a3a3")
-        # self.Menu.configure(font="-family {Segoe UI} -size 9 -weight bold")
-        # self.Menu.configure(foreground="#ffffff")
-        # self.Menu.configure(highlightbackground="#d9d9d9")
-        # self.Menu.configure(highlightcolor="black")
-        # self.Menu.configure(pady="0")
-        # self.Menu.configure(text='''Menu''')
+        self.Frame2 = tk.Frame(top)
+        self.Frame2.place(relx=0.774, rely=0.153, relheight=0.605, relwidth=0.210)
+        self.Frame2.configure(relief='groove')
+        self.Frame2.configure(borderwidth="2")
+        self.Frame2.configure(relief="groove")
+        self.Frame2.configure(background="#d9d9d9")
 
-        # ============================== combobox for algorithm choice ===============================
-        self.algorithm_choose = tk.Label(top,
-                    text = "Choose algorithm")
+        self.Frame3 = tk.Frame(top)
+        self.Frame3.place(relx=0.774, rely=0.767, relheight=0.202, relwidth=0.210)
+        self.Frame3.configure(relief='groove')
+        self.Frame3.configure(borderwidth="2")
+        self.Frame3.configure(relief="groove")
+        self.Frame3.configure(background="#d9d9d9")
 
-        self.algorithm_choose.grid(column=0, row=1)
-        
-        options = ["yolo-v4-tiny", "yolo-v3","yolo-v4","yolo-v5"]
-        #clicked = StringVar()
-        #clicked.set(options[0])
-        self.drop = tk.ttk.Combobox(top,values = options)
-        
-        self.drop.grid(column=0, row=2)
-        self.drop.current(0)
-
-
-        self.Slider = tk.Scale(top, from_=0.0, to=100.0)
-        self.Slider.place(relx=0.222, rely=0.025, relwidth=0.175, relheight=0.0
-                , height=42, bordermode='ignore')
+        self.Slider = tk.Scale(self.Frame_Top, from_=0.0, to=100.0)
+        self.Slider.place(relx=0.376, rely=0.090, relwidth=0.23, relheight=0.0
+                , height=57, bordermode='ignore')
         self.Slider.configure(activebackground="#ececec")
         self.Slider.configure(background="#d9d9d9")
         self.Slider.configure(state=DISABLED, command=slider_show_image)    # do image showing
@@ -135,11 +139,27 @@ class Toplevel1:
         # image show =================================
         self.image_file_state = ImageFileState()
         self.image_label = tk.Label(top)
-        self.image_label.place(relx=0.028, rely=0.15, relheight=0.818, relwidth=0.753)
+        self.image_label.place(relx=0.015, rely=0.15, relheight=0.818, relwidth=0.755)
         # =============================================
 
-        self.Output = tk.Text(top)
-        self.Output.place(relx=0.803, rely=0.20, relheight=0.358, relwidth=0.169)
+        # self.Label1 = tk.Label(top)
+        # self.Label1.place(relx=0.803, rely=0.15, height=32, relwidth=0.169)
+        self.Label1 = tk.Label(self.Frame2)
+        self.Label1.place(relx=0.033, rely=0.023, height=32, relwidth=0.931)
+        self.Label1.configure(activebackground="#f9f9f9")
+        self.Label1.configure(activeforeground="black")
+        self.Label1.configure(background="#808080")
+        self.Label1.configure(disabledforeground="#a3a3a3")
+        self.Label1.configure(font="-family {Segoe UI} -size 9 -weight bold")
+        self.Label1.configure(foreground="#ffffff")
+        self.Label1.configure(highlightbackground="#d9d9d9")
+        self.Label1.configure(highlightcolor="black")
+        self.Label1.configure(text='''Output Data''')
+
+        # self.Output = tk.Text(top)
+        # self.Output.place(relx=0.803, rely=0.19, relheight=0.358, relwidth=0.169)
+        self.Output = tk.Text(self.Frame2)
+        self.Output.place(relx=0.033, rely=0.085, relheight=0.890, relwidth=0.931)
         self.Output.configure(background="white")
         self.Output.configure(font="TkTextFont")
         self.Output.configure(foreground="black")
@@ -151,9 +171,42 @@ class Toplevel1:
         self.Output.configure(selectforeground="white")
         self.Output.configure(wrap="word")
         # self.Output.configure(state=DISABLED)
+        scroll = tk.Scrollbar(top, command=self.Output.yview)
+        self.Output.configure(yscrollcommand=scroll.set)
 
-        self.Left_Arrow = tk.Button(top)
-        self.Left_Arrow.place(relx=0.259, rely=0.087, height=34, width=47)
+        # self.Console_Label = tk.Label(top)
+        # self.Console_Label.place(relx=0.803, rely=0.798, height=32, relwidth=0.169)
+        self.Console_Label = tk.Label(self.Frame3)
+        self.Console_Label.place(relx=0.033, rely=0.069, height=32, relwidth=0.931)
+        self.Console_Label.configure(activebackground="#f9f9f9")
+        self.Console_Label.configure(activeforeground="black")
+        self.Console_Label.configure(background="#808080")
+        self.Console_Label.configure(disabledforeground="#a3a3a3")
+        self.Console_Label.configure(font="-family {Segoe UI} -size 9 -weight bold")
+        self.Console_Label.configure(foreground="#ffffff")
+        self.Console_Label.configure(highlightbackground="#d9d9d9")
+        self.Console_Label.configure(highlightcolor="black")
+        self.Console_Label.configure(text='''Console Output''')
+
+        # self.Console = tk.Text(top)
+        # self.Console.place(relx=0.803, rely=0.835, relheight=0.131
+        #         , relwidth=0.169)
+        self.Console = tk.Text(self.Frame3)
+        self.Console.place(relx=0.033, rely=0.280, relheight=0.625, relwidth=0.931)
+        self.Console.configure(background="white")
+        self.Console.configure(cursor="fleur")
+        self.Console.configure(font="TkTextFont")
+        self.Console.configure(foreground="black")
+        self.Console.configure(highlightbackground="#d9d9d9")
+        self.Console.configure(highlightcolor="black")
+        self.Console.configure(insertbackground="black")
+        self.Console.configure(relief="flat")
+        self.Console.configure(selectbackground="blue")
+        self.Console.configure(selectforeground="white")
+        self.Console.configure(wrap="word")
+
+        self.Left_Arrow = tk.Button(self.Frame_Top)
+        self.Left_Arrow.place(relx=0.431, rely=0.565, height=32, width=47)
         self.Left_Arrow.configure(activebackground="#ececec")
         self.Left_Arrow.configure(activeforeground="#000000")
         self.Left_Arrow.configure(background="#000000")
@@ -166,8 +219,8 @@ class Toplevel1:
         self.Left_Arrow.configure(pady="0")
         self.Left_Arrow.configure(text='''<''')
 
-        self.Right_Arrow = tk.Button(top)
-        self.Right_Arrow.place(relx=0.314, rely=0.087, height=34, width=47)
+        self.Right_Arrow = tk.Button(self.Frame_Top)
+        self.Right_Arrow.place(relx=0.498, rely=0.565, height=32, width=47)
         self.Right_Arrow.configure(activebackground="#ececec")
         self.Right_Arrow.configure(activeforeground="#000000")
         self.Right_Arrow.configure(background="#000000")
@@ -180,31 +233,35 @@ class Toplevel1:
         self.Right_Arrow.configure(pady="0")
         self.Right_Arrow.configure(text='''>''')
 
+        self.TSeparator1 = ttk.Separator(self.Frame_Top)
+        self.TSeparator1.place(relx=0.341, rely=0.143,  relheight=0.714)
+        self.TSeparator1.configure(orient="vertical")
 
-        # self.Frame2 = tk.Frame(top)
-        # self.Frame2.place(relx=0.803, rely=0.15, relheight=0.358, relwidth=0.169)
+        # ==================== combobox for algorithm choice =========================
+        options = ["YOLO-v4-tiny"]
+        self.TCombobox1 = ttk.Combobox(self.Frame_Top, values=options, state='readonly')
+        self.TCombobox1.place(relx=0.033, rely=0.476, relheight=0.295
+                , relwidth=0.169)
+        self.TCombobox1.configure(font="-family {Segoe UI} -size 9")
+        self.TCombobox1.configure(textvariable=GUI_support.combobox)
+        self.TCombobox1.configure(takefocus="")
+        self.TCombobox1.current(0)
 
-        # self.Frame2.configure(relief='groove')
-        # self.Frame2.configure(borderwidth="2")
-        # self.Frame2.configure(relief="groove")
-        # self.Frame2.configure(background="#ffffff")
-        # self.Frame2.configure(highlightbackground="#d9d9d9")
-        # self.Frame2.configure(highlightcolor="black")
+        self.Algorithm_Label = tk.Label(self.Frame_Top)
+        self.Algorithm_Label.place(relx=0.033, rely=0.286, height=22, relwidth=0.169)
+        self.Algorithm_Label.configure(activebackground="#f9f9f9")
+        self.Algorithm_Label.configure(activeforeground="black")
+        self.Algorithm_Label.configure(background="#808080")
+        self.Algorithm_Label.configure(cursor="fleur")
+        self.Algorithm_Label.configure(disabledforeground="#a3a3a3")
+        self.Algorithm_Label.configure(font="-family {Segoe UI} -size 9 -weight bold")
+        self.Algorithm_Label.configure(foreground="#ffffff")
+        self.Algorithm_Label.configure(highlightbackground="#d9d9d9")
+        self.Algorithm_Label.configure(highlightcolor="black")
+        self.Algorithm_Label.configure(text='''Algorithm''')
 
-        self.Label1 = tk.Label(top)
-        self.Label1.place(relx=0.803, rely=0.15, height=32, relwidth=0.169)
-        self.Label1.configure(activebackground="#f9f9f9")
-        self.Label1.configure(activeforeground="black")
-        self.Label1.configure(background="#808080")
-        self.Label1.configure(disabledforeground="#a3a3a3")
-        self.Label1.configure(font="-family {Segoe UI} -size 9 -weight bold")
-        self.Label1.configure(foreground="#ffffff")
-        self.Label1.configure(highlightbackground="#d9d9d9")
-        self.Label1.configure(highlightcolor="black")
-        self.Label1.configure(text='''Output''')
-
-        self.Run = tk.Button(top)
-        self.Run.place(relx=0.12, rely=0.025, height=34, width=77)
+        self.Run = tk.Button(self.Frame_Top)
+        self.Run.place(relx=0.221, rely=0.377, height=34, width=77)
         self.Run.configure(activebackground="#ececec")
         self.Run.configure(activeforeground="#000000")
         self.Run.configure(background="#000000")
@@ -216,18 +273,18 @@ class Toplevel1:
         self.Run.configure(highlightbackground="#d9d9d9")
         self.Run.configure(highlightcolor="black")
         self.Run.configure(pady="0")
-        self.Run.configure(text='''Label''')
+        self.Run.configure(text='''Run''')
 
         # menu =======================================
         self.menubar = tk.Menu(top)
         # create a pulldown menu, and add it to the menu bar
         self.filemenu = Menu(self.menubar, tearoff=0)
 
-        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run, self.Left_Arrow, self.Right_Arrow))
+        self.filemenu.add_command(label="Upload Images", command = lambda: upload_images(self.Slider, self.image_label, self.image_file_state, self.Run, self.Left_Arrow, self.Right_Arrow, self.Output))
         self.filemenu.add_command(label="Upload weights, names and config files as a .zip", command=lambda: upload_config_files(self.image_file_state))
         self.filemenu.add_command(label="Export Output", command=lambda: export_file(self.image_file_state.export_content))
 
-        self.menubar.add_cascade(label="Menu", menu=self.filemenu)
+        self.menubar.add_cascade(label="File", menu=self.filemenu)
 
         top.config(menu=self.menubar)
         # =============================================
