@@ -29,6 +29,8 @@ def vp_start_gui():
     '''Starting point when module is the main routine.'''
     global val, w, root
     root = tk.Tk()
+    icon = tk.PhotoImage(file= r'C:\Users\kimmy\rm_ai_challenge_2020s2_koala\src\GUI\RMlogo.png')
+    root.iconphoto(False, icon)
     GUI_support.set_Tk_var()
     top = Toplevel1 (root)
     GUI_support.init(root, top)
