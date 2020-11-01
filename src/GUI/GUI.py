@@ -140,6 +140,8 @@ class Toplevel1:
         self.image_file_state = ImageFileState()
         self.image_label = tk.Label(top)
         self.image_label.place(relx=0.015, rely=0.15, relheight=0.818, relwidth=0.755)
+        self.image_label.configure(foreground="#808080")
+        self.image_label.configure(text='''Please upload an image to run. \n (Go to the File menu and select Upload Images.)''')
         # =============================================
 
         # self.Label1 = tk.Label(top)
