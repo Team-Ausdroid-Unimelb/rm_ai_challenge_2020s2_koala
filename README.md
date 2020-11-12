@@ -34,17 +34,21 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 [YOLO](https://pjreddie.com/darknet/yolo/) (You only look once) is used for both the armour location and identification algorithms. It's a state-of-the-art real-time object detection system, which can process images fast and achieve a high mAP. [CVAT](https://github.com/openvinotoolkit/cvat) is used for labelling images, and Google Colab is used for training. 
 
 ## User Stories
-### Product Backlog (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/RM-Koala%20Product%20Backlog%20v1.1.pdf)
+### Product Backlog 
+(Find the product backlog [here](https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/RM-Koala%20Product%20Backlog%20v2.0.pdf))
 
-### Sprint 1 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%201/RM-Koala%20Sprin%201%20Output.pdf)
+### Sprint 1
+(Find the Sprint 1 documentation [here](https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/tree/master/docs/Sprint%201))
   1. [US1] locate the opponent robot’s armour in the pictures
   2. [US2] recognize the type of the armour pad the enemy is showing
   
-### Sprint 2 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%202/RM-Koala%20Sprint%202%20Planning%20v1.0.pdf)
+### Sprint 2
+(Find the Sprint 2 documentation [here](https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/tree/master/docs/Sprint%202))
   1. [US3] to have GUI of softrware to use/evaluate computer vision algorithm more easily 
   2. [US4] to make armour location and armour identification algorithms work in conjunction to make product works faster
   3. [US7] to make product locate multiple armours in the image
   4. [US8] to make product identify types of multiple armours located in the input
+
   
 ## Change Logs
 ## [Released] 
@@ -113,9 +117,9 @@ According to the [rules of the competition](https://www.robomaster.com/en-US/res
 
 ## Test Cases
 ### Sprint 1
-- test case document for sprint 1 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%201/RM-Koala%20Testing%20Document.pdf)
+Find the Test Case document for Sprint 1 [here](https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%201/RM-Koala%20Testing%20Document%20Sprint%201.pdf)
 ### Sprint 2 
-- test case document for sprint 2 (https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%202/COMP900822020SM2RMKoala-TestingDocument-Sprint2-291020-0234-2394.pdf)
+Find the Test Case document for Sprint 2 [here](https://github.com/cchia790411/rm_ai_challenge_2020s2_koala/blob/master/docs/Sprint%202/RM-Koala%20Testing%20Document%20Sprint%202.pdf)
 
 ## Traceability matrix
 ![traceability matrix](https://user-images.githubusercontent.com/64014524/97461413-1775be00-1981-11eb-9e81-ea2dc05d2d84.PNG)
